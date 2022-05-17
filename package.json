@@ -16,7 +16,7 @@
   "types": "dist/types/src/index.d.ts",
   "files": [
     "dist/*",
-    "src/**/*.vue"
+    "src/**/*"
   ],
   "scripts": {
     "dev": "slidev example.md --open",
