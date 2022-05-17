@@ -1,3 +1,9 @@
+#### 0.1.2 (2022-05-17)
+
+##### Bug Fixes
+
+*  add all src files into npm package ([a57d3922](https://github.com/Smile-SA/slidev-component-oager/commit/a57d392240c8bcaee2e14fd4918041bbb7b2daa7))
+
 #### 0.1.1 (2022-05-17)
 
 ##### Bug Fixes
