@@ -26,6 +26,23 @@ export default defineAppSetup(({ app, router }) => {
 })
 ```
 
+`slidev-component-poll` uses a serverRef to allow communication with multiple clients, but you will need to defined the default value in your own project.
+
+For that you need to create a `vite.config.ts` file with (see [here](https://sli.dev/custom/config-vite.html) for more information):
+```js
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  slidev: {
+    serverRef: {
+      state: {
+        poll: {}
+      }
+    }
+  }
+});
+```
+
 ## Components
 
 You can create a poll by using the [`Poll` component](#poll).

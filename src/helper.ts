@@ -1,6 +1,6 @@
 import { presenterPassword } from '@slidev/client/logic/nav';
+import { configs } from '@slidev/client/env';
 
-import { configs } from './configs';
 import { state, uid } from './state';
 
 const lastPageIds: Record<string, number> = {};

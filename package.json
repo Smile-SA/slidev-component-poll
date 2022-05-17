@@ -43,7 +43,8 @@
     "node": ">=14.0.0"
   },
   "peerDependencies": {
-    "vue": "^3.2.27"
+    "vue": "^3.2.27",
+    "@slidev/client": "^0.31.4"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.17.10",
@@ -54,6 +55,7 @@
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@slidev/cli": "^0.31.4",
     "@slidev/theme-default": "^0.21.2",
+    "@types/uuid": "^8.3.4",
     "@vue/babel-preset-app": "^5.0.4",
     "@vueuse/shared": "^8.4.2",
     "@zerollup/ts-transform-paths": "^1.7.18",
@@ -69,7 +71,6 @@
     "vue": "^3.2.33"
   },
   "dependencies": {
-    "@types/uuid": "^8.3.4",
     "@vueuse/core": "^8.4.2",
     "@vueuse/motion": "^2.0.0-beta.18",
     "uuid": "^8.3.2"

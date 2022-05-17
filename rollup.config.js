@@ -17,7 +17,7 @@ const external = [
   "@slidev/client/state/syncState", 
   "@slidev/client/logic/nav",
   "@slidev/client/constants",
-  "/@slidev/configs",
+  "@slidev/client/env",
   "uuid",
   "server-reactive:poll"
 ];

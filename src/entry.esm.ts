@@ -1,4 +1,5 @@
 import { App, Plugin } from 'vue';
+import { configs } from '@slidev/client/env';
 
 // Import vue components
 import Poll from "./Poll.vue";
@@ -7,7 +8,6 @@ import PollQuestion from "./PollQuestion.vue";
 import PollResult from "./PollResult.vue";
 import PollResults from "./PollResults.vue";
 import PollTitle from "./PollTitle.vue";
-import { configs } from './configs';
 import { init } from './state';
 
 type InstallableComponent = Record<string, any> & { install: Exclude<Plugin['install'], undefined> };
