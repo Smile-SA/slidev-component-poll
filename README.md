@@ -4,6 +4,10 @@
 
 Poll component for `Slidev`.
 
+![Question](./images/question.png)
+
+![Results](./images/results.png)
+
 ## Installation
 
 ```bash
