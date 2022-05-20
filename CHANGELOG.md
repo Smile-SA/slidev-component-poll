@@ -1,3 +1,9 @@
+## 1.0.0 (2022-05-20)
+
+##### Refactors
+
+*  switch to use the new slidev addon system ([18a02edd](https://github.com/Smile-SA/slidev-component-oager/commit/18a02eddb8a6b08c787b7027756958cac8829236))
+
 #### 0.1.2 (2022-05-17)
 
 ##### Bug Fixes
