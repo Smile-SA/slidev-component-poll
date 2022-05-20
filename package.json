@@ -10,20 +10,15 @@
   "bugs": {
     "url": "https://github.com/Smile-SA/slidev-component-poll/issues"
   },
-  "main": "dist/poll.js",
-  "browser": "dist/poll.mjs",
-  "module": "dist/poll.mjs",
-  "types": "dist/types/src/index.d.ts",
   "files": [
-    "dist/*",
-    "src/**/*"
+    "components/*",
+    "composables/*",
+    "enums/*",
+    "interfaces/*",
+    "services/*"
   ],
   "scripts": {
     "dev": "slidev example.md --open",
-    "prebuild": "rimraf ./dist",
-    "build": "cross-env NODE_ENV=production rollup -c",
-    "postbuild": "rimraf ./dist/types/setup",
-    "prepublishOnly": "npm run build",
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'feat(docs): updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags",
     "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'feat(docs): updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags",
     "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'feat(docs): updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags"
@@ -40,38 +35,23 @@
   },
   "license": "GPL",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.0.0",
+    "slidev": ">=0.32.1"
   },
   "peerDependencies": {
-    "vue": "^3.2.27",
-    "@slidev/client": "^0.31.4"
+    "vue": "^3.2.34",
+    "@slidev/client": "^0.32.1"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.17.10",
-    "@babel/preset-typescript": "^7.16.7",
-    "@iconify-json/mdi": "^1.1.12",
-    "@rollup/plugin-babel": "^5.3.1",
-    "@rollup/plugin-commonjs": "^22.0.0",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "@slidev/cli": "^0.31.4",
+    "@slidev/cli": "^0.32.1",
     "@slidev/theme-default": "^0.21.2",
     "@types/uuid": "^8.3.4",
-    "@vue/babel-preset-app": "^5.0.4",
-    "@vueuse/shared": "^8.4.2",
-    "@zerollup/ts-transform-paths": "^1.7.18",
-    "cross-env": "^7.0.3",
+    "@vueuse/shared": "^8.5.0",
     "generate-changelog": "^1.8.0",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.72.0",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-typescript2": "^0.31.2",
-    "rollup-plugin-vue": "^6.0.0",
-    "ttypescript": "^1.5.13",
-    "typescript": "^4.6.4",
-    "vue": "^3.2.33"
+    "vue": "^3.2.34"
   },
   "dependencies": {
-    "@vueuse/core": "^8.4.2",
+    "@vueuse/core": "^8.5.0",
     "@vueuse/motion": "^2.0.0-beta.18",
     "uuid": "^8.3.2"
   }

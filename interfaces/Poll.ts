@@ -1,8 +1,4 @@
-export enum PollStatus {
-  CLEAR,
-  OPEN,
-  CLOSED
-}
+import { PollStatus } from "../enums/PollStatus"
 
 export interface Poll {
   answers: string[]

@@ -1,0 +1,7 @@
+export enum SlideContext {
+  MAIN,
+  OVERVIEW,
+  PRESENTER_MAIN,
+  PRESENTER_NEXT,
+  PRESENTER_OVERVIEW
+}

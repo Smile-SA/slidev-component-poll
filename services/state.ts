@@ -4,7 +4,7 @@ import { createSyncState } from '@slidev/client/state/syncState'
 // @ts-expect-error vite-plugin-vue-server-ref
 import pollState from 'server-reactive:poll'
 
-import { PollState } from './types';
+import type { PollState } from "../interfaces/Poll";
 
 const { init, onPatch, patch, state } = createSyncState<PollState>(pollState, {});
 

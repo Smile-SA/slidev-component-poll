@@ -4,9 +4,9 @@
 
 Poll component for `Slidev`.
 
-![Question](./images/question.png)
+![Question](./assets/question.png)
 
-![Results](./images/results.png)
+![Results](./assets/results.png)
 
 ## Installation
 
@@ -16,17 +16,28 @@ npm i slidev-component-poll
 
 ## Configuration
 
-Create a `./setup/main.ts` file in your `Slidev` project and register the plugin:
-```js
-import { defineAppSetup } from '@slidev/types'
-import Poll from 'slidev-component-poll'
+Define this package into your slidev addons.
 
-export default defineAppSetup(({ app, router }) => {
-  app.use(Poll)
-})
+In your slides metadata (using frontmatter):
+```
+---
+addons:
+  - slidev-component-poll
+---
 ```
 
-`slidev-component-poll` uses a serverRef to allow communication with multiple clients, but you will need to defined the default value in your own project.
+Or in your `package.json`:
+```json
+{
+  "slidev": {
+    "addons": [
+      "slidev-component-poll"
+    ]
+  }
+}
+```
+
+`slidev-component-poll` uses a serverRef to allow communication with multiple clients, but you will need to define the default value in your own project.
 
 For that you need to create a `vite.config.ts` file with (see [here](https://sli.dev/custom/config-vite.html) for more information):
 ```js

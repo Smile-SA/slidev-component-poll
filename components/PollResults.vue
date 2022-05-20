@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { state } from "./state";
+import { state } from "../services/state";
+
 import PollResult from './PollResult.vue';
 
 const props = defineProps<{

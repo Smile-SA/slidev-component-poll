@@ -2,13 +2,14 @@
 import { computed, ref, watch } from 'vue';
 import { isPresenter } from '@slidev/client/logic/nav';
 
-import { hasControlAccess, hasResult, isPrivateRemoteEnabled } from './helper';
+import { hasControlAccess, hasResult, isPrivateRemoteEnabled } from '../services/helper';
+import { state, uid } from '../services/state';
+import { useId } from '../composables/useId';
+
 import PollControl from './PollControl.vue';
 import PollQuestion from './PollQuestion.vue';
 import PollResults from './PollResults.vue';
 import PollTitle from './PollTitle.vue';
-import { state, uid } from './state';
-import { useId } from './useId';
 
 const props = defineProps<{
   answers: string[]
@@ -20,7 +21,11 @@ const props = defineProps<{
   reopenable?: boolean
 }>();
 const { controlled = false } = props;
-const { elementRef, id } = useId();
+
+let elementRef, id;
+if (!id) {
+  ({ elementRef, id } = useId());
+}
 const showResults = ref(false);
 const hasAccess = hasControlAccess();
 const isPrivate = isPrivateRemoteEnabled();
@@ -50,14 +55,14 @@ watch(id, () => {
         <PollTitle :id="id" :question="question" />
         <button
           v-if="editable || !hasResult(id)"
-          v-show="!showControls.value"
+          v-show="!showControls"
           @click="toggleResults"
           class="poll__button underline"
         >{{ showResults ? 'Show poll' : 'Show results' }}</button>
       </div>
       <PollQuestion
         v-if="!showResults"
-        v-show="!showControls.value"
+        v-show="!showControls"
         :answers="answers"
         :controlled="controlled"
         :editable="editable"
@@ -65,11 +70,11 @@ watch(id, () => {
         :multiple="multiple"
       />
       <PollResults
-        v-if="showResults || showControls.value"
+        v-if="showResults || showControls"
         :id="id"
       />
       <PollControl
-        v-if="showControls.value"
+        v-if="showControls"
         :clearable="clearable"
         :id="id"
         :reopenable="reopenable"

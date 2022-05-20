@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { isPresenter } from '@slidev/client/logic/nav';
 
-import { hasControlAccess } from './helper';
-import { state } from "./state";
-import { PollStatus } from "./types";
+import { hasControlAccess } from '../services/helper';
+import { PollStatus } from "../enums/PollStatus";
+import { state } from '../services/state';
 
 const props = defineProps<{
   clearable?: boolean
