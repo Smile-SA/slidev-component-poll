@@ -53,7 +53,15 @@ function clear() {
   @apply bg-gray-200;
 }
 
+.dark .poll-control__button {
+  @apply bg-gray-800;
+}
+
 .poll-control__button:hover {
   @apply bg-gray-400;
+}
+
+.dark .poll-control__button:hover {
+  @apply bg-gray-600;
 }
 </style>

@@ -82,7 +82,15 @@ onMounted(() =>  {
   @apply bg-gray-200;
 }
 
+.dark .poll-question__input {
+  @apply bg-gray-800;
+}
+
 .poll-question__input:hover {
   @apply bg-gray-400;
+}
+
+.dark .poll-question__input:hover {
+  @apply bg-gray-600;
 }
 </style>

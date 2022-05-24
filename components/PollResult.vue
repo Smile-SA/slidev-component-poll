@@ -44,8 +44,16 @@ watch(
     @apply bg-gray-200;
   }
 
+  .dark .poll-result::before {
+    @apply bg-gray-800;
+  }
+
   .poll-result__bar {
     @apply bg-gray-400;
+  }
+
+  .dark .poll-result__bar {
+    @apply bg-gray-600;
   }
 
   .poll-result__count::before {
