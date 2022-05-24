@@ -24,10 +24,17 @@ const counts = computed<number[]>(() => {
 })
 const total = computed<number>(() => counts.value.reduce((a, b) => a + b, 0))
 const percentages = computed<number[]>(() => counts.value.map(count => total.value === 0 ? 0 : count / total.value * 100))
+const max = computed(() => Math.max(...counts.value))
 </script>
 
 <template>
   <ul v-if="state[id]" class="poll-results">
-    <PollResult v-for="(answer, index) in state[id].answers" :answer="answer" :count="counts[index]" :percentage="percentages[index]"/>
+    <PollResult
+      v-for="(answer, index) in state[id].answers"
+      :answer="answer"
+      :count="counts[index]"
+      :leading="counts[index] === max"
+      :percentage="percentages[index]"
+    />
   </ul>
 </template>

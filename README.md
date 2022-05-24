@@ -121,6 +121,7 @@ This component displays one line of result:
 Parameters:
 * `answer` (`string`, required): Answer to display for that result.
 * `count` (`number`, required): Number of vote for that result.
+* `leading` (`boolean`, default: `false`): The leading result.
 * `percentage` (`number`, required): Percentage value for that result (votes / total).
 
 ### PollTitle
