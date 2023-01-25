@@ -1,3 +1,14 @@
+#### 1.0.1 (2023-01-25)
+
+##### New Features
+
+*  add leading indication ([bb351502](https://github.com/Smile-SA/slidev-component-oager/commit/bb351502d5be821266ea629199294eddf14781fb))
+
+##### Bug Fixes
+
+*  update packages ([4c2be232](https://github.com/Smile-SA/slidev-component-oager/commit/4c2be2328772fcb36a41583956e070421686238f))
+*  better defaults for dark mode ([4b8db73d](https://github.com/Smile-SA/slidev-component-oager/commit/4b8db73dacc55f81c3adbd2bd27b1e8ddc8b73e0))
+
 ## 1.0.0 (2022-05-20)
 
 ##### Refactors
