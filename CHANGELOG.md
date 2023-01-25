@@ -1,3 +1,9 @@
+#### 1.0.2 (2023-01-25)
+
+##### Bug Fixes
+
+*  update @slidev/client package ([f7a50e20](https://github.com/Smile-SA/slidev-component-oager/commit/f7a50e2064cb4716385c4007457ad2647f96dc7c))
+
 #### 1.0.1 (2023-01-25)
 
 ##### New Features
