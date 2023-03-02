@@ -9,17 +9,19 @@ const props = defineProps<{
   clearable?: boolean;
   controlled?: boolean;
   editable?: boolean;
+  id?: string;
   multiple?: boolean;
   question: string;
   reopenable?: boolean;
   results?: PollResultsProp;
 }>();
+const { id, ...otherProps } = props;
 </script>
 
 <template>
   <div class="poll border-1 border-gray-500 p-4 mt-4 mb-4">
-    <PollProvider>
-      <PollContainer v-bind="props">
+    <PollProvider :id="id">
+      <PollContainer v-bind="otherProps">
         <slot />
       </PollContainer>
     </PollProvider>

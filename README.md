@@ -120,8 +120,9 @@ Parameters:
 * `editable` (`boolean`, default: `false`): Can someone's answer be edited by this same person ?
 * `multiple` (`boolean`, default: `false`): Can someone select multiple answers (displays checkbox instead of radio buttons).
 * `controlled` (`boolean`, default: `false`): If `true` the poll will not be opened at the start, use controls to open and close the poll ([see below for more information](#controlled-forms)).
-* `reopenable` (`boolean`, default: `false`): Can the poll be reopened after being closed ? (old results are kept)
-* `clearable` (`boolean`, default: `false`): Can the poll be cleared after being closed ? (results will be cleared and poll can be reopened again)
+* `reopenable` (`boolean`, default: `false`): Can the poll be reopened after being closed ? (old results are kept).
+* `clearable` (`boolean`, default: `false`): Can the poll be cleared after being closed ? (results will be cleared and poll can be reopened again).
+* `id` (`'string'`): Unique identifier for poll (if not provided, the system will generate an id based on the page number).
 * `results` (`'free' | 'auto' | 'none'`, default `'auto'`):
   * `'free'`: User can see results before submitting
   * `'auto'`: Results are only shown after user submission
@@ -141,6 +142,10 @@ It is used to group other sub-components together.
   [Other Poll components here]
 </PollProvider>
 ```
+
+Parameters:
+
+* `id` (`'string'`): Unique identifier for poll (if not provided, the system will generate an id based on the page number).
 
 ### PollQuestion
 

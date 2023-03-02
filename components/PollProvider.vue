@@ -4,8 +4,14 @@ import { provide, ref } from 'vue';
 import { useId } from "../composables/useId";
 import { answersContext, idContext } from '../constants/context';
 
+const props = defineProps<{
+  id?: string;
+}>();
+
 let elementRef, id;
-if (!id) {
+if (props.id) {
+  id = ref(props.id);
+} else if (!id) {
   ({ elementRef, id } = useId());
 }
 
