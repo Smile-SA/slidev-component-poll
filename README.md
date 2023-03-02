@@ -100,10 +100,23 @@ All in one component for poll:
 <Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" />
 ```
 
+Or with markdown answers:
+```html
+<Poll question="What is your favorite color ?">
+
+**Red**
+
+**Green**
+
+**Blue**
+
+</Poll>
+```
+
 Parameters:
 
 * `question` (`string`, required): The question displayed as title.
-* `answers` (`string[]`, required): The available answers to the question.
+* `answers` (`string[]`): The available answers to the question (can also be provided using the default slot).
 * `editable` (`boolean`, default: `false`): Can someone's answer be edited by this same person ?
 * `multiple` (`boolean`, default: `false`): Can someone select multiple answers (displays checkbox instead of radio buttons).
 * `controlled` (`boolean`, default: `false`): If `true` the poll will not be opened at the start, use controls to open and close the poll ([see below for more information](#controlled-forms)).
@@ -112,20 +125,45 @@ Parameters:
 
 ## Sub-components
 
+### PollProvider
+
+Sub-component used by the [`Poll` component](#poll).
+
+The `PollProvider` component is required.
+
+It is used to group other sub-components together.
+```html
+<PollProvider>
+  [Other Poll components here]
+</PollProvider>
+```
+
 ### PollQuestion
 
 Sub-component used by the [`Poll` component](#poll).
 
-If you intend to create your own poll component by using sub-components, the `PollQuestion` component is the only required component.
+The `PollQuestion` component is required.
 
 This component displays the form with the choices of the answers:
 ```html
-<PollQuestion id="1" :answers="['Red', 'Green', 'Blue']" />
+<PollQuestion :answers="['Red', 'Green', 'Blue']" />
+```
+
+Or with markdown answers:
+```html
+<PollQuestion>
+
+**Red**
+
+**Green**
+
+**Blue**
+
+</PollQuestion>
 ```
 
 Parameters:
-* `id` (`string`, required): Used to link sub-components together.
-* `answers` (`string[]`, required): The available answers to the question.
+* `answers` (`string[]`): The available answers to the question (can also be provided using the default slot).
 * `editable` (`boolean`, default: `false`): Can someone's answer be edited by this same person ?
 * `multiple` (`boolean`, default: `false`): Can someone select multiple answers (displays checkbox instead of radio buttons).
 * `controlled` (`boolean`, default: `false`): If `true` the poll will not be opened at the start, use controls to open and close the poll ([see below for more information](#controlled-forms)).
@@ -136,26 +174,8 @@ Sub-component used by the [`Poll` component](#poll).
 
 This component displays the results of the poll:
 ```html
-<PollResults id="1" />
+<PollResults/>
 ```
-
-Parameters:
-* `id` (`string`, required): Used to link sub-components together.
-
-### PollResult
-
-Sub-component used by the [`PollResults` component](#pollresults).
-
-This component displays one line of result:
-```html
-<PollResult id="1" />
-```
-
-Parameters:
-* `answer` (`string`, required): Answer to display for that result.
-* `count` (`number`, required): Number of vote for that result.
-* `leading` (`boolean`, default: `false`): The leading result.
-* `percentage` (`number`, required): Percentage value for that result (votes / total).
 
 ### PollTitle
 
@@ -167,7 +187,7 @@ This component displays the question of the poll:
 ```
 
 Parameters:
-* `id` (`string`, required): Used to link sub-components together.
+* `question` (`string`, required): Question text associated to the poll.
 
 ### PollControl
 
@@ -175,25 +195,28 @@ Sub-component used by the [`Poll` component](#poll).
 
 This component displays the controls of the poll (should be used with `controlled=true` on the `PollQuestion` component):
 ```html
-<PollTitle question="What is your favorite color ?" />
+<PollControl question="What is your favorite color ?" />
 ```
 
 Parameters:
-* `question` (`string`, required): Question to display.
 * `reopenable` (`boolean`, default: `false`): Can the poll be reopened after being closed ? (old results are kept)
 * `clearable` (`boolean`, default: `false`): Can the poll be cleared after being closed ? (results will be cleared and poll can be reopened again)
 * `presenterOnly` (`boolean`, default: `false`): Only display the component on the presenter page.
 
 ### Usage
 
-When using sub-components you have to link them by using the same `id` parameter.
+When using sub-components you have to group them using the `PollProvider` component.
 
 Example:
 ```html
-<PollTitle question="What is your favorite color ?"/>
-<PollQuestion id="1" :answers="['Red', 'Green', 'Blue']" />
-<PollResults id="1" />
+<PollProvider>
+  <PollTitle question="What is your favorite color ?"/>
+  <PollQuestion :answers="['Red', 'Green', 'Blue']" />
+  <PollResults />
+</Provider>
 ```
+
+[See examples](./example.md).
 
 ## Controlled forms
 

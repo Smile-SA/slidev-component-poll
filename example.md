@@ -43,60 +43,118 @@ pollServer: ws://localhost:8080
 
 ---
 
+## Poll with HTML answers
+
+<Poll question="What is your favorite color ?">
+
+```js
+() => 'Red';
+```
+
+```js
+() => 'Green';
+```
+
+```js
+() => 'Blue';
+```
+
+</Poll>
+
+---
+
 ## Simple poll (components)
 
-<PollTitle question="What is your favorite color ?"/>
-<PollQuestion id="1" :answers="['Red', 'Green', 'Blue']" />
-<PollResults id="1" />
+<PollProvider>
+  <PollTitle question="What is your favorite color ?"/>
+  <PollQuestion :answers="['Red', 'Green', 'Blue']" />
+  <PollResults/>
+</PollProvider>
 
 ---
 
 ## Editable poll (components)
 
-<PollTitle question="What is your favorite color ?"/>
-<PollQuestion id="2" :answers="['Red', 'Green', 'Blue']" :editable="true" />
-<PollResults id="2" />
+<PollProvider>
+  <PollTitle question="What is your favorite color ?"/>
+  <PollQuestion :answers="['Red', 'Green', 'Blue']" :editable="true" />
+  <PollResults/>
+</PollProvider>
 
 ---
 
 ## Mutiple poll (components)
 
-<PollTitle question="What are your favorite colors ?"/>
-<PollQuestion id="3" :answers="['Red', 'Green', 'Blue']" :multiple="true" />
-<PollResults id="3" />
+<PollProvider>
+  <PollTitle question="What are your favorite colors ?"/>
+  <PollQuestion :answers="['Red', 'Green', 'Blue']" :multiple="true" />
+  <PollResults/>
+</PollProvider>
 
 ---
 
 ## Controlled poll (components)
 
-<PollTitle question="What is your favorite color ?"/>
-<PollQuestion id="4" :answers="['Red', 'Green', 'Blue']" :controlled="true" />
-<PollResults id="4" />
-<PollControl id="4" />
+<PollProvider>
+  <PollTitle question="What is your favorite color ?"/>
+  <PollQuestion :answers="['Red', 'Green', 'Blue']" :controlled="true" />
+  <PollResults/>
+  <PollControl/>
+</PollProvider>
 
 ---
 
 ## Reopenable poll (components)
 
-<PollTitle question="What is your favorite color ?"/>
-<PollQuestion id="5" :answers="['Red', 'Green', 'Blue']" :controlled="true" />
-<PollResults id="5" />
-<PollControl id="5" :reopenable="true" />
+<PollProvider>
+  <PollTitle question="What is your favorite color ?"/>
+  <PollQuestion :answers="['Red', 'Green', 'Blue']" :controlled="true" />
+  <PollResults/>
+  <PollControl :reopenable="true" />
+</PollProvider>
 
 ---
 
 ## Clearable poll (components)
 
-<PollTitle question="What is your favorite color ?"/>
-<PollQuestion id="5" :answers="['Red', 'Green', 'Blue']" :controlled="true" />
-<PollResults id="5" />
-<PollControl id="5" :clearable="true" />
+<PollProvider>
+  <PollTitle question="What is your favorite color ?"/>
+  <PollQuestion :answers="['Red', 'Green', 'Blue']" :controlled="true" />
+  <PollResults/>
+  <PollControl :clearable="true" />
+</PollProvider>
 
 ---
 
 ## Controllled poll from presenter mode (components)
 
-<PollTitle question="What is your favorite color ?"/>
-<PollQuestion id="6" :answers="['Red', 'Green', 'Blue']" :controlled="true" />
-<PollResults id="6" />
-<PollControl id="6" :presenterOnly="true" />
+<PollProvider>
+  <PollTitle question="What is your favorite color ?"/>
+  <PollQuestion :answers="['Red', 'Green', 'Blue']" :controlled="true" />
+  <PollResults/>
+  <PollControl :presenterOnly="true" />
+</PollProvider>
+
+---
+
+## Poll with HTML answers (components)
+
+<PollProvider>
+  <PollTitle question="What is your favorite color ?"/>
+  <PollQuestion>
+
+```js
+() => 'Red';
+```
+
+```js
+() => 'Green';
+```
+
+```js
+() => 'Blue';
+```
+
+  </PollQuestion>
+  <PollResults/>
+</PollProvider>

@@ -1,43 +1,49 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { inject, isVNode, onMounted, ref } from "vue";
 
-import { hasResult } from '../services/helper';
+import { useAnswers } from "../composables/useAnswers";
+import { idContext } from "../constants/context";
 import { PollStatus } from "../enums/PollStatus";
-import { answerPoll, initPoll, state, uid } from '../services/state';
-import { Result } from '../interfaces/Poll';
+import { Result } from "../interfaces/Poll";
+import { hasResult } from "../services/helper";
+import { answerPoll, initPoll, state, uid } from "../services/state";
 
 const props = defineProps<{
-  answers: string[]
-  controlled?: boolean
-  editable?: boolean
-  id: string
-  multiple?: boolean
+  answers?: string[];
+  controlled?: boolean;
+  editable?: boolean;
+  multiple?: boolean;
 }>();
-const { answers, editable = false, id, multiple = false } = props;
+const { answers, editable = false, multiple = false } = props;
+const id = inject(idContext, ref(''));
 
+const renderAnswers = useAnswers(answers);
 const chosenAnswer = ref<null | Result>(getDefaultValue());
 
 function getDefaultValue(): null | Result {
-  const answer = state[id]?.results?.[uid.value];
-  if (hasResult(id)) {
-    if (answer instanceof Array && multiple || typeof answer === 'number' && !multiple) {
+  const answer = state[id.value]?.results?.[uid.value];
+  if (hasResult(id.value)) {
+    if (
+      (answer instanceof Array && multiple) ||
+      (typeof answer === "number" && !multiple)
+    ) {
       return answer;
-    } else if (multiple && typeof answer === 'number') {
+    } else if (multiple && typeof answer === "number") {
       return [answer];
     } else if (!multiple && answer instanceof Array) {
       return answer[0];
     }
   }
-  return multiple ? [] as number[]: null
+  return multiple ? ([] as number[]) : null;
 }
 
 function handleSubmit() {
-  answerPoll(id, chosenAnswer.value)
+  answerPoll(id.value, chosenAnswer.value);
 }
 
-onMounted(() =>  {
-  if (!state[id]) {
-    initPoll(id, answers);
+onMounted(() => {
+  if (!state[id.value]) {
+    initPoll(id.value);
   }
 });
 </script>
@@ -45,33 +51,62 @@ onMounted(() =>  {
 <template>
   <div v-if="state && state[id]" class="poll-question">
     <form
-      v-if="(!controlled || state[id].status === PollStatus.OPEN) && (editable || !hasResult(id))"
+      v-if="
+        (!controlled || state[id].status === PollStatus.OPEN) &&
+        (editable || !hasResult(id))
+      "
       @submit.prevent="handleSubmit"
       class="poll-question__form"
     >
-      <ul class="poll-question__list">
-        <li v-for="(answer, index) in answers" class="poll-question__item list-none flex items-center h-8 !m-0 !p-1">
-          <label class="poll-question__item-label">
+      <ul class="poll-question__list mb-2">
+        <li
+          v-for="(answer, index) in renderAnswers"
+          class="poll-question__item list-none flex items-center !m-0 !p-1 !leading-6"
+        >
+          <label class="poll-question__item-label flex w-full">
             <input
               :type="multiple ? 'checkbox' : 'radio'"
               :value="index"
               :name="`question-${id}`"
               v-model="chosenAnswer"
-              class="poll-question__item-input"
+              class="poll-question__item-input mr-1"
             />
-            {{answer}}
+            <div class="poll-question__item-text flex-1">
+              <component v-if="isVNode(answer)" :is="answer" />
+              <div v-else>{{ answer }}</div>
+            </div>
           </label>
         </li>
       </ul>
-      <input type="submit" class="poll-question__input p-1"/>
+      <input type="submit" class="poll-question__input p-1" />
     </form>
-    <div v-else-if="controlled && state[id].status === PollStatus.CLEAR" class="poll-question__clear">The poll is not open</div>
-    <div v-else-if="controlled && state[id].status === PollStatus.CLOSED" class="poll-question__closed">The poll is closed</div>
-    <div v-else-if="!editable && state[id]?.results[uid] !== undefined" class="poll-question__voted">Voted!</div>
+    <div
+      v-else-if="controlled && state[id].status === PollStatus.CLEAR"
+      class="poll-question__clear"
+    >
+      The poll is not open
+    </div>
+    <div
+      v-else-if="controlled && state[id].status === PollStatus.CLOSED"
+      class="poll-question__closed"
+    >
+      The poll is closed
+    </div>
+    <div
+      v-else-if="!editable && state[id]?.results[uid] !== undefined"
+      class="poll-question__voted"
+    >
+      Voted!
+    </div>
   </div>
 </template>
 
 <style scoped>
+.poll-question {
+  --slidev-code-margin: 0;
+  --prism-block-margin-y: 0;
+}
+
 .poll-question__input {
   @apply bg-gray-200;
 }
@@ -86,5 +121,11 @@ onMounted(() =>  {
 
 .dark .poll-question__input:hover {
   @apply bg-gray-600;
+}
+</style>
+
+<style>
+.poll-question .poll-question__item-text > p {
+  margin: 0;
 }
 </style>

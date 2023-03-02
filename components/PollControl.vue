@@ -1,49 +1,62 @@
 <script setup lang="ts">
-import { isPresenter } from '@slidev/client/logic/nav';
+import { inject, ref } from "vue";
+import { isPresenter } from "@slidev/client/logic/nav";
 
-import { hasControlAccess } from '../services/helper';
+import { idContext } from "../constants/context";
 import { PollStatus } from "../enums/PollStatus";
-import { resetPoll, setPollStatus, state } from '../services/state';
+import { hasControlAccess } from "../services/helper";
+import { resetPoll, setPollStatus, state } from "../services/state";
 
 const props = defineProps<{
-  clearable?: boolean
-  id: string
-  presenterOnly?: boolean
-  reopenable?: boolean
+  clearable?: boolean;
+  presenterOnly?: boolean;
+  reopenable?: boolean;
 }>();
-const { id } = props;
+const id = inject(idContext, ref(''));
 const hasAccess = hasControlAccess();
 
 function open() {
-  setPollStatus(id, PollStatus.OPEN);
+  setPollStatus(id.value, PollStatus.OPEN);
 }
 
 function close() {
-  setPollStatus(id, PollStatus.CLOSED);
+  setPollStatus(id.value, PollStatus.CLOSED);
 }
 
 function clear() {
-  resetPoll(id);
+  resetPoll(id.value);
 }
 </script>
 
 <template>
-  <div v-if="state[id] && hasAccess && (!presenterOnly || isPresenter)" class="poll-control">
+  <div
+    v-if="state[id] && hasAccess && (!presenterOnly || isPresenter)"
+    class="poll-control"
+  >
     <button
-      v-if="state[id].status === PollStatus.CLEAR || (state[id].status === PollStatus.CLOSED && reopenable)"
+      v-if="
+        state[id].status === PollStatus.CLEAR ||
+        (state[id].status === PollStatus.CLOSED && reopenable)
+      "
       @click="open"
       class="poll-control__button p-1"
-    >Open poll</button>
+    >
+      Open poll
+    </button>
     <button
       v-if="state[id].status === PollStatus.OPEN"
       @click="close"
       class="poll-control__button p-1"
-    >Close poll</button>
+    >
+      Close poll
+    </button>
     <button
       v-if="state[id].status === PollStatus.CLOSED && clearable"
       @click="clear"
       class="poll-control__button p-1"
-    >Clear poll</button>
+    >
+      Clear poll
+    </button>
   </div>
 </template>
 

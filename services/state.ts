@@ -18,7 +18,7 @@ export const connectState = ref(ConnectionStatus.IDLE);
 
 let state: PollState;
 let connect: () => void;
-let initPoll: (id: string, answers: string[]) => void;
+let initPoll: (id: string) => void;
 let setPollStatus: (id: string, status: PollStatus) => void;
 let resetPoll: (id: string) => void;
 let answerPoll: (id: string, answer: Result | null) => void
@@ -33,7 +33,6 @@ if (configs.pollServer) {
   }
 
   function onOpen() {
-    console.log('onOpen', groupId.value)
     if (groupId.value) {
       ws.send(
         JSON.stringify({
@@ -70,9 +69,8 @@ if (configs.pollServer) {
     initWebSocket()
   }
 
-  initPoll = (id: string, answers: string[]) => {
+  initPoll = (id: string) => {
     state[id] = {
-      answers,
       results: {},
       status: PollStatus.CLEAR,
     };
@@ -126,9 +124,8 @@ if (configs.pollServer) {
 } else {
   ({ state } = createSyncState<PollState>(pollState, {}));
 
-  initPoll = (id: string, answers: string[]) => {
+  initPoll = (id: string) => {
     state[id] = {
-      answers,
       results: {},
       status: PollStatus.CLEAR,
     };
