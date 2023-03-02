@@ -9,10 +9,6 @@ import { state, uid } from './state';
 
 const hashids = new Hashids()
 
-export function hasResult(id: string): boolean  {
-  return state[id]?.results[uid.value] !== undefined
-}
-
 export function hasControlAccess(): boolean {
   return !configs.remote || configs.remote === presenterPassword.value;
 }

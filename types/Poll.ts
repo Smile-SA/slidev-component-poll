@@ -1,4 +1,4 @@
-import { PollStatus } from "../enums/PollStatus"
+import { PollStatus } from "./PollStatus"
 
 export type Result = number | number[]
 
@@ -8,3 +8,5 @@ export interface Poll {
 }
 
 export type PollState = Record<string, Poll>
+
+export type PollResultsProp = 'free' | 'auto' | 'none'

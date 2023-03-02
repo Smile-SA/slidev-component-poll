@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { inject, isVNode, onMounted, ref } from "vue";
+import { computed, inject, isVNode, onMounted, ref } from "vue";
 
 import { useAnswers } from "../composables/useAnswers";
 import { idContext } from "../constants/context";
-import { PollStatus } from "../enums/PollStatus";
-import { Result } from "../interfaces/Poll";
-import { hasResult } from "../services/helper";
 import { answerPoll, initPoll, state, uid } from "../services/state";
+import { Result } from "../types/Poll";
+import { PollStatus } from "../types/PollStatus";
 
 const props = defineProps<{
   answers?: string[];
@@ -18,11 +17,14 @@ const { answers, editable = false, multiple = false } = props;
 const id = inject(idContext, ref(''));
 
 const renderAnswers = useAnswers(answers);
+const hasResult = computed(
+  () => state[id.value]?.results[uid.value] !== undefined
+);
 const chosenAnswer = ref<null | Result>(getDefaultValue());
 
 function getDefaultValue(): null | Result {
   const answer = state[id.value]?.results?.[uid.value];
-  if (hasResult(id.value)) {
+  if (hasResult.value) {
     if (
       (answer instanceof Array && multiple) ||
       (typeof answer === "number" && !multiple)
@@ -53,7 +55,7 @@ onMounted(() => {
     <form
       v-if="
         (!controlled || state[id].status === PollStatus.OPEN) &&
-        (editable || !hasResult(id))
+        (editable || !hasResult)
       "
       @submit.prevent="handleSubmit"
       class="poll-question__form"

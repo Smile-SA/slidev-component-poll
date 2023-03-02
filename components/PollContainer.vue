@@ -6,10 +6,10 @@ import { useAnswers } from "../composables/useAnswers";
 import { idContext } from "../constants/context";
 import {
   hasControlAccess,
-  hasResult,
   isPrivateRemoteEnabled,
 } from "../services/helper";
 import { state, uid } from "../services/state";
+import { PollResultsProp } from "../types/Poll";
 
 import PollControl from "./PollControl.vue";
 import PollQuestion from "./PollQuestion.vue";
@@ -24,15 +24,27 @@ const props = defineProps<{
   multiple?: boolean;
   question: string;
   reopenable?: boolean;
+  results?: PollResultsProp;
 }>();
-const { answers, controlled = false } = props;
-const id = inject(idContext, ref(''));
+const { answers, controlled = false, editable, results = "auto" } = props;
+const id = inject(idContext, ref(""));
 
-const showResults = ref(hasResult(id.value));
-const hasAccess = hasControlAccess();
-const isPrivate = isPrivateRemoteEnabled();
-const showControls = computed(
-  () => controlled && hasAccess && (isPrivate || isPresenter.value)
+const canUseControls = computed(
+  () => hasControlAccess() && (isPrivateRemoteEnabled() || isPresenter.value)
+);
+const showControls = computed(() => controlled && canUseControls.value);
+const hasResult = computed(
+  () => state[id.value]?.results[uid.value] !== undefined
+);
+const showResults = ref(
+  showControls.value || (hasResult.value && results !== "none")
+);
+const showPollButton = computed(() => canUseControls || editable);
+const showResultsButton = computed(
+  () =>
+    canUseControls ||
+    results === "free" ||
+    (results === "auto" && hasResult.value)
 );
 useAnswers(answers);
 
@@ -44,33 +56,33 @@ function toggleResults() {
 watch(
   () => state[id.value]?.results[uid.value],
   () => {
-    if (hasResult(id.value)) {
+    if (hasResult.value && results !== "none") {
       showResults.value = true;
     }
   }
 );
-
-// display results if user has already submitted a value (initialization)
-watch(id, () => {
-  showResults.value = hasResult(id.value);
-});
 </script>
 
 <template>
   <div class="poll__header flex justify-between">
     <PollTitle :id="id" :question="question" />
     <button
-      v-if="editable || !hasResult(id)"
-      v-show="!showControls"
+      v-if="showResults && showPollButton"
       @click="toggleResults"
       class="poll__button underline"
     >
-      {{ showResults ? "Show poll" : "Show results" }}
+      Show poll
+    </button>
+    <button
+      v-if="!showResults && showResultsButton"
+      @click="toggleResults"
+      class="poll__button underline"
+    >
+      Show results
     </button>
   </div>
   <PollQuestion
     v-if="!showResults"
-    v-show="!showControls"
     :answers="answers"
     :controlled="controlled"
     :editable="editable"
@@ -79,7 +91,7 @@ watch(id, () => {
   >
     <slot />
   </PollQuestion>
-  <PollResults v-if="showResults || showControls" :id="id" />
+  <PollResults v-if="showResults" :id="id" />
   <PollControl
     v-if="showControls"
     :clearable="clearable"

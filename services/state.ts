@@ -6,9 +6,10 @@ import { configs } from "@slidev/client/env";
 // @ts-expect-error vite-plugin-vue-server-ref
 import pollState from "server-reactive:poll";
 
-import type { PollState, Result } from "../interfaces/Poll";
-import { PollStatus } from "../enums/PollStatus";
-import { ConnectionStatus } from "../enums/ConnectionStatus";
+import type { PollState, Result } from "../types/Poll";
+import { PollStatus } from "../types/PollStatus";
+import { ConnectionStatus } from "../types/ConnectionStatus";
+
 import { getHash } from "./helper";
 
 export const uid = useStorage("slidev-poll-device-id", uuidv4());

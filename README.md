@@ -122,6 +122,10 @@ Parameters:
 * `controlled` (`boolean`, default: `false`): If `true` the poll will not be opened at the start, use controls to open and close the poll ([see below for more information](#controlled-forms)).
 * `reopenable` (`boolean`, default: `false`): Can the poll be reopened after being closed ? (old results are kept)
 * `clearable` (`boolean`, default: `false`): Can the poll be cleared after being closed ? (results will be cleared and poll can be reopened again)
+* `results` (`'free' | 'auto' | 'none'`, default `'auto'`):
+  * `'free'`: User can see results before submitting
+  * `'auto'`: Results are only shown after user submission
+  * `'none'`: Results are only accessible for user that have access to controls
 
 ## Sub-components
 

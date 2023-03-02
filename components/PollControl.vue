@@ -3,9 +3,9 @@ import { inject, ref } from "vue";
 import { isPresenter } from "@slidev/client/logic/nav";
 
 import { idContext } from "../constants/context";
-import { PollStatus } from "../enums/PollStatus";
 import { hasControlAccess } from "../services/helper";
 import { resetPoll, setPollStatus, state } from "../services/state";
+import { PollStatus } from "../types/PollStatus";
 
 const props = defineProps<{
   clearable?: boolean;

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PollResultsProp } from "../types/Poll";
+
 import PollContainer from "./PollContainer.vue";
 import PollProvider from "./PollProvider.vue";
 
@@ -10,6 +12,7 @@ const props = defineProps<{
   multiple?: boolean;
   question: string;
   reopenable?: boolean;
+  results?: PollResultsProp;
 }>();
 </script>
 
@@ -17,7 +20,7 @@ const props = defineProps<{
   <div class="poll border-1 border-gray-500 p-4 mt-4 mb-4">
     <PollProvider>
       <PollContainer v-bind="props">
-        <slot/>
+        <slot />
       </PollContainer>
     </PollProvider>
   </div>
