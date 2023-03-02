@@ -1,8 +1,10 @@
 import { PollStatus } from "../enums/PollStatus"
 
+export type Result = number | number[]
+
 export interface Poll {
   answers: string[]
-  results: Record<string, number | number[]>
+  results: Record<string, Result>
   status: PollStatus
 }
 

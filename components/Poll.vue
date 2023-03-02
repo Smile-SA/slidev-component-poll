@@ -16,7 +16,7 @@ const props = defineProps<{
   clearable?: boolean
   controlled?: boolean
   editable?: boolean
-  multiple?: BooleanConstructor
+  multiple?: boolean
   question: string
   reopenable?: boolean
 }>();
@@ -29,7 +29,7 @@ if (!id) {
 const showResults = ref(false);
 const hasAccess = hasControlAccess();
 const isPrivate = isPrivateRemoteEnabled();
-const showControls = computed(() => controlled && hasAccess && (isPrivate || isPresenter))
+const showControls = computed(() => controlled && hasAccess && (isPrivate || isPresenter.value))
 
 function toggleResults() {
   showResults.value = !showResults.value;

@@ -37,7 +37,15 @@ Or in your `package.json`:
 }
 ```
 
-`slidev-component-poll` uses a serverRef to allow communication with multiple clients, but you will need to define the default value in your own project.
+### Using serverRef
+
+`slidev-component-poll` can use built-in slidev capabilities to allow communication with multiple clients.
+
+By using serverRef, the communication with multiple clients is **only possible in dev mode**!
+
+This won't work if you build and deploy to a static host.
+
+To use serverRef you will need to define the default value in your own project.
 
 For that you need to create a `vite.config.ts` file with (see [here](https://sli.dev/custom/config-vite.html) for more information):
 ```js
@@ -54,6 +62,31 @@ export default defineConfig({
 });
 ```
 
+### Using WebSocket server
+
+You can use a WebSocket server to allow communication with multiple clients.
+
+Take at look at this custom implementation: https://github.com/Smile-SA/slidev-poll-ws-server
+
+In that case you only need to put in your markdown file frontmatter (Update the value of `pollServer` using your own installation):
+```yaml
+---
+pollServer: ws://localhost:8080
+---
+```
+
+Then, in the presentation, click on the connect icon.
+
+![Connect control icon](./assets/control-icon.png)
+
+Type in a hash that you can share with other peoples and press <key>enter</key>. (you can use the proposed hash: everybody that are on the same presentation will have the same)
+
+![Connect control hash](./assets/control-hash.png)
+
+You are connected!
+
+![Connected](./assets/connected.png)
+
 ## Components
 
 You can create a poll by using the [`Poll` component](#poll).
@@ -63,7 +96,7 @@ But if this component does not suit your needs, you can use individual [sub-comp
 ### Poll
 
 All in one component for poll:
-```vue
+```html
 <Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" />
 ```
 
@@ -86,7 +119,7 @@ Sub-component used by the [`Poll` component](#poll).
 If you intend to create your own poll component by using sub-components, the `PollQuestion` component is the only required component.
 
 This component displays the form with the choices of the answers:
-```vue
+```html
 <PollQuestion id="1" :answers="['Red', 'Green', 'Blue']" />
 ```
 
@@ -102,7 +135,7 @@ Parameters:
 Sub-component used by the [`Poll` component](#poll).
 
 This component displays the results of the poll:
-```vue
+```html
 <PollResults id="1" />
 ```
 
@@ -114,7 +147,7 @@ Parameters:
 Sub-component used by the [`PollResults` component](#pollresults).
 
 This component displays one line of result:
-```vue
+```html
 <PollResult id="1" />
 ```
 
@@ -129,7 +162,7 @@ Parameters:
 Sub-component used by the [`Poll` component](#poll).
 
 This component displays the question of the poll:
-```vue
+```html
 <PollTitle question="What is your favorite color ?" />
 ```
 
@@ -141,7 +174,7 @@ Parameters:
 Sub-component used by the [`Poll` component](#poll).
 
 This component displays the controls of the poll (should be used with `controlled=true` on the `PollQuestion` component):
-```vue
+```html
 <PollTitle question="What is your favorite color ?" />
 ```
 
@@ -156,7 +189,7 @@ Parameters:
 When using sub-components you have to link them by using the same `id` parameter.
 
 Example:
-```vue
+```html
 <PollTitle question="What is your favorite color ?"/>
 <PollQuestion id="1" :answers="['Red', 'Green', 'Blue']" />
 <PollResults id="1" />

@@ -5,7 +5,7 @@
   "homepage": "https://github.com/Smile-SA/slidev-component-poll",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Smile-SA/slidev-component-oager.git"
+    "url": "git@github.com:Smile-SA/slidev-component-poll.git"
   },
   "bugs": {
     "url": "https://github.com/Smile-SA/slidev-component-poll/issues"
@@ -19,6 +19,7 @@
   ],
   "scripts": {
     "dev": "slidev example.md --open",
+    "build": "slidev build example.md",
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'feat(docs): updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags",
     "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'feat(docs): updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags",
     "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'feat(docs): updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags"
@@ -39,8 +40,8 @@
     "slidev": ">=0.32.1"
   },
   "peerDependencies": {
-    "vue": "^3.2.34",
-    "@slidev/client": "0.x"
+    "@slidev/client": "0.x",
+    "vue": "^3.2.34"
   },
   "devDependencies": {
     "@slidev/cli": "0.x",
@@ -53,6 +54,7 @@
   "dependencies": {
     "@vueuse/core": "^8.5.0",
     "@vueuse/motion": "^2.0.0-beta.18",
+    "hashids": "^2.2.11",
     "uuid": "^8.3.2"
   }
 }

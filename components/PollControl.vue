@@ -3,7 +3,7 @@ import { isPresenter } from '@slidev/client/logic/nav';
 
 import { hasControlAccess } from '../services/helper';
 import { PollStatus } from "../enums/PollStatus";
-import { state } from '../services/state';
+import { resetPoll, setPollStatus, state } from '../services/state';
 
 const props = defineProps<{
   clearable?: boolean
@@ -15,16 +15,15 @@ const { id } = props;
 const hasAccess = hasControlAccess();
 
 function open() {
-  state[id].status = PollStatus.OPEN;
+  setPollStatus(id, PollStatus.OPEN);
 }
 
 function close() {
-  state[id].status = PollStatus.CLOSED;
+  setPollStatus(id, PollStatus.CLOSED);
 }
 
 function clear() {
-  state[id].results = {};
-  state[id].status = PollStatus.CLEAR;
+  resetPoll(id);
 }
 </script>
 

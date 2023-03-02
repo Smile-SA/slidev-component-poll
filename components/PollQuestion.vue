@@ -1,22 +1,23 @@
-<script setup lang="ts">
-import { onMounted, ref, watchEffect } from 'vue';
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
 
 import { hasResult } from '../services/helper';
 import { PollStatus } from "../enums/PollStatus";
-import { state, uid } from '../services/state';
+import { answerPoll, initPoll, state, uid } from '../services/state';
+import { Result } from '../interfaces/Poll';
 
 const props = defineProps<{
   answers: string[]
   controlled?: boolean
   editable?: boolean
   id: string
-  multiple?: BooleanConstructor
+  multiple?: boolean
 }>();
 const { answers, editable = false, id, multiple = false } = props;
 
-const chosenAnswer = ref<null | number | number[]>(getDefaultValue());
+const chosenAnswer = ref<null | Result>(getDefaultValue());
 
-function getDefaultValue(): null | number | number[] {
+function getDefaultValue(): null | Result {
   const answer = state[id]?.results?.[uid.value];
   if (hasResult(id)) {
     if (answer instanceof Array && multiple || typeof answer === 'number' && !multiple) {
@@ -31,19 +32,12 @@ function getDefaultValue(): null | number | number[] {
 }
 
 function handleSubmit() {
-  const poll = state[id];
-  if (poll && chosenAnswer.value !== null) {
-    poll.results[uid.value] = chosenAnswer.value;
-  }
+  answerPoll(id, chosenAnswer.value)
 }
 
 onMounted(() =>  {
   if (!state[id]) {
-    state[id] = {
-      answers,
-      results: {},
-      status: PollStatus.CLEAR
-    };
+    initPoll(id, answers);
   }
 });
 </script>
