@@ -46,7 +46,7 @@ function initWebSocket() {
     eventSource = new EventSource(`${url}/event?uid=${uid.value}`);
     eventSource.addEventListener("message", onMessage);
     eventSource.addEventListener("open", onOpen);
-    eventSource.addEventListener("close", onClose);
+    eventSource.addEventListener("error", onClose);
   } else {
     onOpen();
   }
