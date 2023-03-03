@@ -68,14 +68,16 @@ watch(
   <div class="poll__header flex justify-between">
     <PollTitle :id="id" :question="question" />
     <button
-      v-if="showResults && showPollButton"
+      v-if="showPollButton.value"
+      v-show="showResults"
       @click="toggleResults"
       class="poll__button underline"
     >
       Show poll
     </button>
     <button
-      v-if="!showResults && showResultsButton"
+      v-if="showResultsButton.value"
+      v-show="!showResults"
       @click="toggleResults"
       class="poll__button underline"
     >
