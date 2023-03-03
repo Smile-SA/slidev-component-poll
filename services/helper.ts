@@ -1,13 +1,11 @@
-import type { RouteRecordRaw } from 'vue-router';
-import Hashids from 'hashids'
-import { presenterPassword } from '@slidev/client/logic/nav';
-import { configs } from '@slidev/client/env';
+import type { RouteRecordRaw } from "vue-router";
+import Hashids from "hashids";
+import { presenterPassword } from "@slidev/client/logic/nav";
+import { configs } from "@slidev/client/env";
 // @ts-expect-error missing types
-import rawRoutes from '/@slidev/routes'
+import rawRoutes from "/@slidev/routes";
 
-import { state, uid } from './state';
-
-const hashids = new Hashids()
+const hashids = new Hashids();
 
 export function hasControlAccess(): boolean {
   return !configs.remote || configs.remote === presenterPassword.value;
@@ -26,14 +24,29 @@ function cyrb53(str: string, seed = 0) {
     h1 = Math.imul(h1 ^ ch, 2654435761);
     h2 = Math.imul(h2 ^ ch, 1597334677);
   }
-  
-  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-  
+
+  h1 =
+    Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^
+    Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 =
+    Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^
+    Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+
   return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 }
 
 export function getHash() {
-  const slides = rawRoutes.map((route) => route?.meta?.slide?.raw ?? '').join('\n');
+  const slides = rawRoutes
+    .map((route) => route?.meta?.slide?.raw ?? "")
+    .join("\n");
   return hashids.encode(cyrb53(slides));
+}
+
+export function getPollServer() {
+  if (configs.pollServer) {
+    return configs.pollServer.endsWith("/")
+      ? configs.pollServer.slice(0, -1)
+      : configs.pollServer;
+  }
+  return "";
 }

@@ -1,5 +1,4 @@
-<script setup lang="ts">
-
+<script lang="ts" setup>
 defineProps<{
   question: string
 }>();

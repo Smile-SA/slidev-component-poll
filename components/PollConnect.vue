@@ -2,7 +2,8 @@
 import { computed, onMounted, ref, watch } from "vue";
 import VerticalDivider from "@slidev/client/internals/VerticalDivider.vue";
 
-import { autoConnect, connect, connectState, groupId } from "../services/state";
+import { connectPoll } from "../services/methods";
+import { autoConnect, connectState, groupId } from "../services/server";
 import { ConnectionStatus } from "../types/ConnectionStatus";
 
 const input = ref<HTMLInputElement>();
@@ -15,10 +16,10 @@ const title = computed(() => {
   } else if (connectState.value === ConnectionStatus.CONNECTED) {
     return "Connected";
   } else {
-    return "Connect with poll WebSocket server";
+    return "Connect with poll server";
   }
 });
-const hasWebSocketError = computed(
+const hasConnectionError = computed(
   () =>
     connectState.value === ConnectionStatus.DISCONNECTED ||
     connectState.value === ConnectionStatus.ERROR
@@ -31,7 +32,7 @@ watch(isOpen, () => {
 });
 
 function submit() {
-  connect();
+  connectPoll();
   isOpen.value = false;
 }
 
@@ -41,7 +42,7 @@ onMounted(() => {
     autoConnect.value &&
     new Date().getTime() - new Date(autoConnect.value).getTime() < oneDay
   ) {
-    connect();
+    connectPoll();
   }
 });
 </script>
@@ -51,13 +52,13 @@ onMounted(() => {
   <button class="slidev-icon-btn" @click="isOpen = !isOpen" :title="title">
     <carbon:wifi-bridge-alt
       :class="{
-        'text-red-500': hasWebSocketError,
+        'text-red-500': hasConnectionError,
         'text-green-500': connectState === ConnectionStatus.CONNECTED,
       }"
     />
   </button>
   <form
-    v-if="!hasWebSocketError"
+    v-if="!hasConnectionError"
     class="flex align-center py-2"
     @submit.prevent="submit"
   >

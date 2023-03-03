@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed, inject, ref, watch } from "vue";
 import { isPresenter } from "@slidev/client/logic/nav";
 
@@ -8,7 +8,8 @@ import {
   hasControlAccess,
   isPrivateRemoteEnabled,
 } from "../services/helper";
-import { state, uid } from "../services/state";
+import { state } from "../services/state";
+import { uid } from "../services/user";
 import { PollResultsProp } from "../types/Poll";
 
 import PollControl from "./PollControl.vue";
@@ -86,7 +87,6 @@ watch(
     :answers="answers"
     :controlled="controlled"
     :editable="editable"
-    :id="id"
     :multiple="multiple"
   >
     <slot />
@@ -95,7 +95,6 @@ watch(
   <PollControl
     v-if="showControls"
     :clearable="clearable"
-    :id="id"
     :reopenable="reopenable"
   />
 </template>

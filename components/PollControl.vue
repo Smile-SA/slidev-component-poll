@@ -1,10 +1,11 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { inject, ref } from "vue";
 import { isPresenter } from "@slidev/client/logic/nav";
 
 import { idContext } from "../constants/context";
 import { hasControlAccess } from "../services/helper";
-import { resetPoll, setPollStatus, state } from "../services/state";
+import { resetPoll, setPollStatus } from "../services/methods";
+import { state } from "../services/state";
 import { PollStatus } from "../types/PollStatus";
 
 const props = defineProps<{

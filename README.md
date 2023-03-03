@@ -62,13 +62,22 @@ export default defineConfig({
 });
 ```
 
-### Using WebSocket server
+### Using a server
 
-You can use a WebSocket server to allow communication with multiple clients.
+You can use a Server Sent Events server or a WebSocket server to allow communication with multiple clients.
 
-Take at look at this custom implementation: https://github.com/Smile-SA/slidev-poll-ws-server
+Take at look at this custom implementation: https://github.com/Smile-SA/slidev-poll-server
 
-In that case you only need to put in your markdown file frontmatter (Update the value of `pollServer` using your own installation):
+In that case you only need to use the `pollServer` config in your markdown file frontmatter (Update the value of `pollServer` using your own installation).
+
+For HTTP Server Sent Events server:
+```yaml
+---
+pollServer: http://localhost:8080
+---
+```
+
+Or for WebSocket server:
 ```yaml
 ---
 pollServer: ws://localhost:8080

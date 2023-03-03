@@ -1,5 +1,6 @@
 ---
 theme: default
+pollServer: http://localhost:8080/
 ---
 
 # Example slides

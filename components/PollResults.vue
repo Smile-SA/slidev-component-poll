@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed, inject, isVNode, ref } from "vue";
 
 import { answersContext } from "../constants/context";

@@ -3,7 +3,9 @@ import { computed, inject, isVNode, onMounted, ref } from "vue";
 
 import { useAnswers } from "../composables/useAnswers";
 import { idContext } from "../constants/context";
-import { answerPoll, initPoll, state, uid } from "../services/state";
+import { answerPoll, initPoll } from "../services/methods";
+import { state } from "../services/state";
+import { uid } from "../services/user";
 import { Result } from "../types/Poll";
 import { PollStatus } from "../types/PollStatus";
 

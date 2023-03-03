@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { PollResultsProp } from "../types/Poll";
 
 import PollContainer from "./PollContainer.vue";
