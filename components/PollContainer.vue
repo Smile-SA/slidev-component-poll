@@ -40,10 +40,10 @@ const hasResult = computed(
 const showResults = ref(
   showControls.value || (hasResult.value && results !== "none")
 );
-const showPollButton = computed(() => canUseControls || editable);
+const showPollButton = computed(() => canUseControls.value || editable);
 const showResultsButton = computed(
   () =>
-    canUseControls ||
+    canUseControls.value ||
     results === "free" ||
     (results === "auto" && hasResult.value)
 );
@@ -68,7 +68,7 @@ watch(
   <div class="poll__header flex justify-between">
     <PollTitle :id="id" :question="question" />
     <button
-      v-if="showPollButton.value"
+      v-if="showPollButton"
       v-show="showResults"
       @click="toggleResults"
       class="poll__button underline"
@@ -76,7 +76,7 @@ watch(
       Show poll
     </button>
     <button
-      v-if="showResultsButton.value"
+      v-if="showResultsButton"
       v-show="!showResults"
       @click="toggleResults"
       class="poll__button underline"
