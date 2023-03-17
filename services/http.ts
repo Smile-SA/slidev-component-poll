@@ -19,7 +19,7 @@ function onMessage(event) {
 
 function onOpen() {
   if (groupId.value) {
-    fetch(`http://localhost:8080/connect?uid=${uid.value}`, {
+    fetch(`${url}/connect?uid=${uid.value}`, {
       body: JSON.stringify({
         id: groupId.value,
         state,
@@ -67,7 +67,7 @@ export function init(id: string) {
 export function setStatus(id: string, status: PollStatus) {
   state[id].status = status;
   if (connectState.value === ConnectionStatus.CONNECTED) {
-    fetch(`http://localhost:8080/status?uid=${uid.value}`, {
+    fetch(`${url}/status?uid=${uid.value}`, {
       body: JSON.stringify({
         id: groupId.value,
         pollId: id,
@@ -85,7 +85,7 @@ export function reset(id: string) {
   state[id].results = {};
   state[id].status = PollStatus.CLEAR;
   if (connectState.value === ConnectionStatus.CONNECTED) {
-    fetch(`http://localhost:8080/reset?uid=${uid.value}`, {
+    fetch(`${url}/reset?uid=${uid.value}`, {
       body: JSON.stringify({
         id: groupId.value,
         pollId: id,
@@ -103,18 +103,18 @@ export function answer(id: string, result: Result | null) {
   if (poll && result !== null) {
     state[id].results[uid.value] = result;
     if (connectState.value === ConnectionStatus.CONNECTED) {
-      fetch(`http://localhost:8080/answer?uid=${uid.value}`, {
-      body: JSON.stringify({
-        id: groupId.value,
-        pollId: id,
-        result,
-        userId: uid.value,
-      }),
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-    });
+      fetch(`${url}/answer?uid=${uid.value}`, {
+        body: JSON.stringify({
+          id: groupId.value,
+          pollId: id,
+          result,
+          userId: uid.value,
+        }),
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+      });
     }
   }
 }
