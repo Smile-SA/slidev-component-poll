@@ -76,15 +76,7 @@ export function connect(resolve: Resolve) {
   resolveConnected = resolve;
 }
 
-export function init(id: string) {
-  pollState[id] = {
-    results: {},
-    status: PollStatus.CLEAR,
-  };
-}
-
 export function setStatus(id: string, status: PollStatus) {
-  pollState[id].status = status;
   if (connectState.value === ConnectionStatus.CONNECTED) {
     webSocket.send(
       JSON.stringify({
@@ -98,8 +90,6 @@ export function setStatus(id: string, status: PollStatus) {
 }
 
 export function reset(id: string) {
-  pollState[id].results = {};
-  pollState[id].status = PollStatus.CLEAR;
   if (connectState.value === ConnectionStatus.CONNECTED) {
     webSocket.send(
       JSON.stringify({
@@ -112,25 +102,20 @@ export function reset(id: string) {
 }
 
 export function answer(id: string, result: Result | null) {
-  const poll = pollState[id];
-  if (poll && result !== null) {
-    pollState[id].results[deviceId.value] = result;
-    if (connectState.value === ConnectionStatus.CONNECTED) {
-      webSocket.send(
-        JSON.stringify({
-          id: groupId.value,
-          pollId: id,
-          result,
-          type: "answer",
-          userId: deviceId.value,
-        })
-      );
-    }
+  if (connectState.value === ConnectionStatus.CONNECTED) {
+    webSocket.send(
+      JSON.stringify({
+        id: groupId.value,
+        pollId: id,
+        result,
+        type: "answer",
+        userId: deviceId.value,
+      })
+    );
   }
 }
 
 export function login(user: string) {
-  userState[deviceId.value] = user;
   if (connectState.value === ConnectionStatus.CONNECTED) {
     webSocket.send(
       JSON.stringify({

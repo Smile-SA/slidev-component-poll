@@ -65,15 +65,7 @@ export function connect(resolve: Resolve) {
   resolveConnected = resolve
 }
 
-export function init(id: string) {
-  pollState[id] = {
-    results: {},
-    status: PollStatus.CLEAR,
-  };
-}
-
 export function setStatus(id: string, status: PollStatus) {
-  pollState[id].status = status;
   if (connectState.value === ConnectionStatus.CONNECTED) {
     fetch(`${url}/status?uid=${deviceId.value}`, {
       body: JSON.stringify({
@@ -90,8 +82,6 @@ export function setStatus(id: string, status: PollStatus) {
 }
 
 export function reset(id: string) {
-  pollState[id].results = {};
-  pollState[id].status = PollStatus.CLEAR;
   if (connectState.value === ConnectionStatus.CONNECTED) {
     fetch(`${url}/reset?uid=${deviceId.value}`, {
       body: JSON.stringify({
@@ -107,28 +97,23 @@ export function reset(id: string) {
 }
 
 export function answer(id: string, result: Result | null) {
-  const poll = pollState[id];
-  if (poll && result !== null) {
-    pollState[id].results[deviceId.value] = result;
-    if (connectState.value === ConnectionStatus.CONNECTED) {
-      fetch(`${url}/answer?uid=${deviceId.value}`, {
-        body: JSON.stringify({
-          id: groupId.value,
-          pollId: id,
-          result,
-          userId: deviceId.value,
-        }),
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-      });
-    }
+  if (connectState.value === ConnectionStatus.CONNECTED) {
+    fetch(`${url}/answer?uid=${deviceId.value}`, {
+      body: JSON.stringify({
+        id: groupId.value,
+        pollId: id,
+        result,
+        userId: deviceId.value,
+      }),
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
   }
 }
 
 export function login(user: string) {
-  userState[deviceId.value] = user;
   if (connectState.value === ConnectionStatus.CONNECTED) {
     fetch(`${url}/login?uid=${deviceId.value}`, {
       body: JSON.stringify({
