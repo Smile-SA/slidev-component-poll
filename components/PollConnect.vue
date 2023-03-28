@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { configs } from "@slidev/client/env";
 import { computed, onMounted, ref, watch } from "vue";
 import VerticalDivider from "@slidev/client/internals/VerticalDivider.vue";
 
@@ -38,11 +39,16 @@ function submit() {
 
 const oneDay = 1000 * 60 * 60 * 24;
 onMounted(() => {
-  if (
-    autoConnect.value &&
-    new Date().getTime() - new Date(autoConnect.value).getTime() < oneDay
-  ) {
-    connectPoll();
+  if (configs.pollSettings?.autoConnect) {
+    console.log(configs.pollSettings?.autoConnect);
+    if (
+      configs.pollSettings?.autoConnect === true ||
+      (autoConnect.value &&
+        new Date().getTime() - new Date(autoConnect.value).getTime() <
+          configs.pollSettings?.autoConnect * 1000)
+    ) {
+      connectPoll();
+    }
   }
 });
 </script>

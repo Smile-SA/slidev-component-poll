@@ -12,8 +12,9 @@ declare module "@slidev/client/state/shared" {
 declare module "@slidev/types" {
   export interface SlidevConfig {
     pollSettings?: {
-      server?: string;
+      autoConnect?: boolean;
       anonymous?: boolean;
+      server?: string;
     }
   }
 }

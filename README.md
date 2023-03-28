@@ -101,6 +101,24 @@ You are connected!
 
 ![Connected](./assets/connected.png)
 
+You can also use the `autoConnect` settings to automatically connect to the server:
+```yaml
+---
+pollSettings:
+  server: http://localhost:8080
+  autoConnect: true
+---
+```
+
+Or provide a number of seconds. In that case you will need to connect the first time, and then if you refresh the page it will automatically reconnect you if the number of seconds since the last connection has not be elapsed:
+```yaml
+---
+pollSettings:
+  server: http://localhost:8080
+  autoConnect: 86400 # one day
+---
+```
+
 ### Anonymous
 
 If you prefer that users answer polls anonymously, or prefer to skip the step of defining a name when answering polls, add in the Front Matter:
