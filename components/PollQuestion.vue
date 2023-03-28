@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { configs } from "@slidev/client/env";
 import { computed, inject, isVNode, ref } from "vue";
 
 import { useAnswers } from "../composables/useAnswers";
@@ -6,9 +7,11 @@ import { idContext } from "../constants/context";
 import { getDefaultValue } from "../services/helper";
 import { answerPoll } from "../services/methods";
 import { pollState } from "../services/state";
-import { deviceId } from "../services/user";
+import { deviceId, userId } from "../services/user";
 import { Result } from "../types/Poll";
 import { PollStatus } from "../types/PollStatus";
+
+import PollUser from "./PollUser.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -35,56 +38,59 @@ function handleSubmit() {
 </script>
 
 <template>
-  <div v-if="pollState && pollState[id]" class="poll-question">
-    <form
-      v-if="
-        (!controlled || pollState[id].status === PollStatus.OPEN) &&
-        (editable || !hasResult)
-      "
-      @submit.prevent="handleSubmit"
-      class="poll-question__form"
-    >
-      <ul class="poll-question__list mb-2">
-        <li
-          v-for="(answer, index) in renderAnswers"
-          class="poll-question__item list-none flex items-center !m-0 !p-1 !leading-6 border-1 border-transparent"
-        >
-          <label class="poll-question__item-label flex w-full">
-            <input
-              :type="multiple ? 'checkbox' : 'radio'"
-              :value="index"
-              :name="`question-${id}`"
-              v-model="chosenAnswer"
-              class="poll-question__item-input mr-1"
-            />
-            <div class="poll-question__item-text flex-1">
-              <component v-if="isVNode(answer)" :is="answer" />
-              <div v-else>{{ answer }}</div>
-            </div>
-          </label>
-        </li>
-      </ul>
-      <input type="submit" class="poll-question__input p-1" />
-    </form>
-    <div
-      v-else-if="controlled && pollState[id].status === PollStatus.CLEAR"
-      class="poll-question__clear"
-    >
-      The poll is not open
+  <template v-if="configs.pollSettings?.anonymous || userId">
+    <div v-if="pollState && pollState[id]" class="poll-question">
+      <form
+        v-if="
+          (!controlled || pollState[id].status === PollStatus.OPEN) &&
+          (editable || !hasResult)
+        "
+        @submit.prevent="handleSubmit"
+        class="poll-question__form"
+      >
+        <ul class="poll-question__list mb-2">
+          <li
+            v-for="(answer, index) in renderAnswers"
+            class="poll-question__item list-none flex items-center !m-0 !p-1 !leading-6 border-1 border-transparent"
+          >
+            <label class="poll-question__item-label flex w-full">
+              <input
+                :type="multiple ? 'checkbox' : 'radio'"
+                :value="index"
+                :name="`question-${id}`"
+                v-model="chosenAnswer"
+                class="poll-question__item-input mr-1"
+              />
+              <div class="poll-question__item-text flex-1">
+                <component v-if="isVNode(answer)" :is="answer" />
+                <div v-else>{{ answer }}</div>
+              </div>
+            </label>
+          </li>
+        </ul>
+        <input type="submit" class="poll-question__input p-1" />
+      </form>
+      <div
+        v-else-if="controlled && pollState[id].status === PollStatus.CLEAR"
+        class="poll-question__clear"
+      >
+        The poll is not open
+      </div>
+      <div
+        v-else-if="controlled && pollState[id].status === PollStatus.CLOSED"
+        class="poll-question__closed"
+      >
+        The poll is closed
+      </div>
+      <div
+        v-else-if="!editable && pollState[id]?.results[deviceId] !== undefined"
+        class="poll-question__voted"
+      >
+        Voted!
+      </div>
     </div>
-    <div
-      v-else-if="controlled && pollState[id].status === PollStatus.CLOSED"
-      class="poll-question__closed"
-    >
-      The poll is closed
-    </div>
-    <div
-      v-else-if="!editable && pollState[id]?.results[deviceId] !== undefined"
-      class="poll-question__voted"
-    >
-      Voted!
-    </div>
-  </div>
+  </template>
+  <PollUser v-else />
 </template>
 
 <style scoped>

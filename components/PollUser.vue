@@ -27,14 +27,14 @@ function handleSubmit(event) {
     <label>
       Enter your name:
       <div class="mt-2">
-        <input v-model="user" />
+        <input v-model="user" class="border-1 border-gray-500 rounded" />
         <span class="ml-2 text-red-400" v-if="exist">
           This name is already used
         </span>
       </div>
     </label>
     <div class="mt-3">
-      <input class="primary" type="submit" />
+      <input class="primary p-1" type="submit" />
     </div>
   </form>
 </template>
