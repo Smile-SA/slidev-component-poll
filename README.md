@@ -2,11 +2,13 @@
 
 [![NPM version](https://img.shields.io/npm/v/slidev-component-poll?color=3AB9D4&label=)](https://www.npmjs.com/package/slidev-component-poll)
 
-Poll component for `Slidev`.
+Poll and quiz component for `Slidev`.
 
 ![Question](./assets/question.png)
 
 ![Results](./assets/results.png)
+
+See below for more examples.
 
 ## Installation
 
@@ -55,7 +57,8 @@ export default defineConfig({
   slidev: {
     serverRef: {
       state: {
-        poll: {}
+        polls: {},
+        users: {},
       }
     }
   }
@@ -100,7 +103,7 @@ You are connected!
 
 ### Anonymous
 
-If you prefer that users answer polls anonymously, or prefer to skip the step of defining a name, add in the Front Matter:
+If you prefer that users answer polls anonymously, or prefer to skip the step of defining a name when answering polls, add in the Front Matter:
 
 ```yaml
 ---
@@ -137,126 +140,50 @@ Or with markdown answers:
 
 Parameters:
 
-* `question` (`string`, required): The question displayed as title.
 * `answers` (`string[]`): The available answers to the question (can also be provided using the default slot).
-* `editable` (`boolean`, default: `false`): Can someone's answer be edited by this same person ?
-* `multiple` (`boolean`, default: `false`): Can someone select multiple answers (displays checkbox instead of radio buttons).
+* `clearable` (`boolean`, default: `false`): Can the poll be cleared after being closed ? (results will be cleared and poll can be reopened again). For controlled polls only.
 * `controlled` (`boolean`, default: `false`): If `true` the poll will not be opened at the start, use controls to open and close the poll ([see below for more information](#controlled-forms)).
-* `reOpenable` (`boolean`, default: `false`): Can the poll be reopened after being closed ? (old results are kept).
-* `clearable` (`boolean`, default: `false`): Can the poll be cleared after being closed ? (results will be cleared and poll can be reopened again).
+* `correctAnswer` (`number | number[]`): Highlight the corresponding answer(s) in the results (index starts at `0`).
+* `displayResults` (`'poll' | 'quiz' | 'publicQuiz'`, default `'quiz'`): Display results as poll or quiz ([see below for more information](#poll-and-quiz)).
+* `editable` (`boolean`, default: `false`): Can someone's answer be edited by this same person ?
 * `id` (`'string'`): Unique identifier for poll (if not provided, the system will generate an id based on the page number).
-* `results` (`'free' | 'auto' | 'none'`, default `'auto'`):
+* `multiple` (`boolean`, default: `false`): Can someone select multiple answers (displays checkbox instead of radio buttons).
+* `question` (`string`, **required**): The question displayed as title.
+* `reOpenable` (`boolean`, default: `false`): Can the poll be reopened after being closed ? (old results are kept).
+* `showResults` (`'free' | 'auto' | 'none'`, default `'auto'`):
   * `'free'`: User can see results before submitting
   * `'auto'`: Results are only shown after user submission
   * `'none'`: Results are only accessible for user that have access to controls
 
-## Sub-components
+## Poll and quiz
 
-### PollProvider
+You can use this addon to either create polls or quizzes mostly base on the `displayResults` props.
 
-Sub-component used by the [`Poll` component](#poll).
+Here is an example when `displayResults="poll"` (left side show slideshow view and right side show presenter view).
 
-The `PollProvider` component is required.
+* Poll not answered:
+  ![Poll not answered](./assets/simple-poll.png)
+* Poll results (when answered):
+  ![Poll results](./assets/simple-poll-results.png)
 
-It is used to group other sub-components together.
-```html
-<PollProvider>
-  [Other Poll components here]
-</PollProvider>
+Code example:
+```md
+<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" displayResults="poll" />
 ```
 
-Parameters:
+Here is an other example when `displayResults="quiz"` or `displayResults="publicQuiz"`.
 
-* `id` (`'string'`): Unique identifier for poll (if not provided, the system will generate an id based on the page number).
+* Quiz not answered:
+  ![Poll not answered](./assets/simple-quiz.png)
+* Quiz results (when answered):
+  ![Poll results](./assets/simple-quiz-results.png)
 
-### PollQuestion
-
-Sub-component used by the [`Poll` component](#poll).
-
-The `PollQuestion` component is required.
-
-This component displays the form with the choices of the answers:
-```html
-<PollQuestion :answers="['Red', 'Green', 'Blue']" />
+Code example:
+```md
+<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" correctAnswer="0" />
 ```
 
-Or with markdown answers:
-```html
-<PollQuestion>
-
-**Red**
-
-**Green**
-
-**Blue**
-
-</PollQuestion>
-```
-
-Parameters:
-* `answers` (`string[]`): The available answers to the question (can also be provided using the default slot).
-* `editable` (`boolean`, default: `false`): Can someone's answer be edited by this same person ?
-* `multiple` (`boolean`, default: `false`): Can someone select multiple answers (displays checkbox instead of radio buttons).
-* `controlled` (`boolean`, default: `false`): If `true` the poll will not be opened at the start, use controls to open and close the poll ([see below for more information](#controlled-forms)).
-
-### PollResults
-
-Sub-component used by the [`Poll` component](#poll).
-
-This component displays the results of the poll:
-```html
-<PollResults/>
-```
-
-### PollTitle
-
-Sub-component used by the [`Poll` component](#poll).
-
-This component displays the question of the poll:
-```html
-<PollTitle question="What is your favorite color ?" />
-```
-
-Parameters:
-* `question` (`string`, required): Question text associated to the poll.
-
-### PollControl
-
-Sub-component used by the [`Poll` component](#poll).
-
-This component displays the controls of the poll (should be used with `controlled=true` on the `PollQuestion` component):
-```html
-<PollControl question="What is your favorite color ?" />
-```
-
-Parameters:
-* `reOpenable` (`boolean`, default: `false`): Can the poll be reopened after being closed ? (old results are kept)
-* `clearable` (`boolean`, default: `false`): Can the poll be cleared after being closed ? (results will be cleared and poll can be reopened again)
-* `presenterOnly` (`boolean`, default: `false`): Only display the component on the presenter page.
-
-### PollUser
-
-Sub-component used by the [`Poll` component](#poll).
-
-This component displays an input for the user to enter his/her name:
-```html
-<PollUser />
-```
-
-### Usage
-
-When using sub-components you have to group them using the `PollProvider` component.
-
-Example:
-```html
-<PollProvider>
-  <PollTitle question="What is your favorite color ?"/>
-  <PollQuestion :answers="['Red', 'Green', 'Blue']" />
-  <PollResults />
-</Provider>
-```
-
-[See examples](./example.md).
+People names will be shown in front of the results for the presenter or if `displayResults="publicQuiz"`.
 
 ## Controlled forms
 
@@ -267,7 +194,18 @@ The poll can have three state:
 * `OPEN`: Poll is open, and results can be received.
 * `CLOSED`: Poll is closed, and results can not be received anymore.
 
-If you run the slidev server with remote access (and you should if you want other people to answer your poll), then you can control the state of the poll from the presenter view.
+Here is an example when `controlled=true` and `clearable=true` (left side show slideshow view and right side show presenter view).
+
+* Poll is not yet open:
+  ![Clearable poll not open](./assets/clearable-poll.png)
+* Poll is open:
+  ![Clearable poll open](./assets/clearable-poll-open.png)
+* Answer has been submitted:
+  ![Clearable poll answer submitted](./assets/clearable-poll-results.png)
+* Poll is closed:
+  ![Clearable poll closed](./assets/clearable-poll-closed.png)
+
+If you run the slidev server with remote access (and you should if you don't use a server but want other people to answer your polls), then you can control the state of the poll from the presenter view.
 
 When remote control is enabled, the presenter button is not shown, so people does not have direct access to the presenter view.
 
@@ -275,10 +213,10 @@ But anyone who tap the presenter view URL in its browser can access the presente
 
 If you want to prevent that, you can start the server with `--remote=[your_password]` and in that case the presenter view is a little more secured.
 
-When using a password, the controls will also be displayed on the presentation but only if the password query parameter in the URL is correct.
+When using a password, the controls will also be displayed on the slideshow but only if the password query parameter in the URL is correct.
 
 We can sum up the following cases:
 
-* presentation view without password (or wrong password): controls are not shown
-* presentation view with correct password (if any is set): controls are shown
+* slideshow view without password (or wrong password): controls are not shown
+* slideshow view with correct password (if any is set): controls are shown
 * presenter view: controls are shown
