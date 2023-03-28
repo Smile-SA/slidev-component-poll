@@ -4,7 +4,8 @@ export default defineConfig({
   slidev: {
     serverRef: {
       state: {
-        poll: {}
+        polls: {},
+        users: {},
       }
     }
   }

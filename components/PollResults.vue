@@ -1,57 +1,54 @@
 <script lang="ts" setup>
-import { computed, inject, isVNode, ref } from "vue";
+import { inject, ref } from "vue";
 
-import { answersContext } from "../constants/context";
 import { idContext } from "../constants/context";
-import { state } from "../services/state";
+import { canUseControls } from "../services/helper";
+import { pollState } from "../services/state";
+import { DisplayResultsProp } from "../types/Poll";
+import { PollStatus } from "../types/PollStatus";
 
-import PollResult from "./PollResult.vue";
+import PollResultsPoll from "./PollResultsPoll.vue";
+import PollResultsQuiz from "./PollResultsQuiz.vue";
 
-const id = inject(idContext, ref(''));
-
-const context = inject(answersContext);
-const renderAnswers = computed(() => {
-  if (context?.answers) {
-    return context.answers.value;
-  }
-  return [];
-});
-
-const counts = computed<number[]>(() => {
-  const poll = state[id.value];
-  if (poll) {
-    return renderAnswers.value?.map((_: unknown, i: number) =>
-      Object.values(poll.results).reduce(
-        (acc: number, result) =>
-          acc +
-          Number(
-            result instanceof Array ? result.indexOf(i) > -1 : result === i
-          ),
-        0
-      )
-    );
-  }
-  return [];
-});
-const total = computed<number>(() => counts.value.reduce((a, b) => a + b, 0));
-const percentages = computed<number[]>(() =>
-  counts.value.map((count) =>
-    total.value === 0 ? 0 : (count / total.value) * 100
-  )
+withDefaults(
+  defineProps<{
+    answers?: string[];
+    controlled?: boolean;
+    correctAnswer?: string | number | number[];
+    displayResults?: DisplayResultsProp;
+    multiple?: boolean;
+  }>(),
+  { displayResults: "quiz" }
 );
-const max = computed(() => Math.max(...counts.value));
+const id = inject(idContext, ref(""));
 </script>
 
 <template>
-  <ul v-if="state[id]" class="poll-results">
-    <PollResult
-      v-for="(answer, index) in renderAnswers"
-      :count="counts[index]"
-      :leading="counts[index] === max"
-      :percentage="percentages[index]"
+  <template v-if="pollState && pollState[id]">
+    <template
+      v-if="
+        !controlled ||
+        pollState[id].status === PollStatus.CLOSED ||
+        canUseControls
+      "
     >
-      <component v-if="isVNode(answer)" :is="answer" />
-      <div v-else>{{ answer }}</div>
-    </PollResult>
-  </ul>
+      <PollResultsPoll
+        v-if="displayResults === 'poll'"
+        :controlled="controlled"
+        :correctAnswer="correctAnswer"
+      />
+      <PollResultsQuiz
+        v-else-if="displayResults === 'quiz' || displayResults === 'publicQuiz'"
+        :answers="answers"
+        :controlled="controlled"
+        :correctAnswer="correctAnswer"
+        :multiple="multiple"
+        :public="displayResults === 'publicQuiz'"
+      />
+    </template>
+    <template v-else>
+      <p>Your answer has been submitted.</p>
+      <p>Waiting for the poll to be closed...</p>
+    </template>
+  </template>
 </template>

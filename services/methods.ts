@@ -2,52 +2,68 @@ import { configs } from "@slidev/client/env";
 
 import type { Result } from "../types/Poll";
 import { PollStatus } from "../types/PollStatus";
+import { Resolve } from "../types/Promise";
 
-let connect: () => void;
+let connect: (resolve: Resolve) => void;
 let init: (id: string) => void;
 let setStatus: (id: string, status: PollStatus) => void;
 let reset: (id: string) => void;
 let answer: (id: string, result: Result | null) => void;
+let login: (user: string) => void;
+
+let resolveConnected: Resolve = () => {};
+const connectedPromise = new Promise<void>((resolve) => {
+  resolveConnected = resolve
+})
 
 const promise = (async () => {
-  if (configs.pollServer) {
-    if (configs.pollServer.startsWith("ws")) {
-      ({ answer, connect, init, reset, setStatus } = await import(
+  if (configs.pollSettings?.server) {
+    if (configs.pollSettings.server.startsWith("ws")) {
+      ({ answer, connect, init, login, reset, setStatus } = await import(
         "./webSocket"
       ));
     } else {
-      ({ answer, connect, init, reset, setStatus } = await import(
+      ({ answer, connect, init, login, reset, setStatus } = await import(
         "./http"
       ));
     }
   } else {
-    ({ answer, init, reset, setStatus } = await import(
-      "./serverRef"
-    ));
+    ({ answer, init, login, reset, setStatus } = await import("./serverRef"));
+    resolveConnected();
   }
 })();
 
 export async function answerPoll(id: string, result: Result | null) {
   await promise;
-  answer?.(id, result)
+  await connectedPromise;
+  answer?.(id, result);
 }
 
 export async function connectPoll() {
   await promise;
-  connect?.()
+  connect?.(resolveConnected);
+}
+
+export async function loginPoll(user: string) {
+  await promise;
+  await connectedPromise;
+  login?.(user);
 }
 
 export async function initPoll(id: string) {
   await promise;
-  init?.(id)
+  await connectedPromise;
+  init?.(id);
 }
 
 export async function resetPoll(id: string) {
   await promise;
-  reset?.(id)
+  await connectedPromise;
+  reset?.(id);
 }
 
 export async function setPollStatus(id: string, status: PollStatus) {
   await promise;
-  setStatus?.(id, status)
+  await connectedPromise;
+  setStatus?.(id, status);
 }

@@ -1,19 +1,40 @@
-import { reactive } from "vue";
-
-import type { PollState, Result } from "../types/Poll";
+import type { PollState, Result, UserState } from "../types/Poll";
 import { PollStatus } from "../types/PollStatus";
 import { ConnectionStatus } from "../types/ConnectionStatus";
 
 import { getPollServer } from "./helper";
 import { autoConnect, connectState, groupId } from "./server";
-import { state } from "./state";
-import { uid } from "./user";
+import { pollState, userState } from "./state";
+import { deviceId } from "./user";
+import { Resolve } from "../types/Promise";
 
-let webSocket;
+enum SendType {
+  POLL = "poll",
+  USER = "user",
+}
+
+interface SendPollState {
+  type: SendType.POLL
+  data: PollState
+}
+
+interface SendUserState {
+  type: SendType.USER
+  data: UserState
+}
+
+type SendState = SendPollState | SendUserState;
+
+let resolveConnected: Resolve;
+let webSocket: WebSocket;
 
 function onMessage(event) {
-  const data = JSON.parse(event.data) as PollState;
-  Object.entries(data).forEach(([key, value]) => (state[key] = value));
+  const { data, type } = JSON.parse(event.data) as SendState;
+  if (type === SendType.POLL) {
+    Object.entries(data).forEach(([key, value]) => (pollState[key] = value));
+  } else {
+    Object.entries(data).forEach(([key, value]) => (userState[key] = value));
+  }
 }
 
 function onOpen() {
@@ -21,11 +42,12 @@ function onOpen() {
     webSocket.send(
       JSON.stringify({
         id: groupId.value,
-        state,
+        state: pollState,
         type: "connect",
       })
     );
     connectState.value = ConnectionStatus.CONNECTED;
+    resolveConnected()
   }
 }
 
@@ -48,20 +70,21 @@ function initWebSocket() {
   }
 }
 
-export function connect() {
+export function connect(resolve: Resolve) {
   autoConnect.value = new Date().toISOString();
   initWebSocket();
-};
+  resolveConnected = resolve;
+}
 
 export function init(id: string) {
-  state[id] = {
+  pollState[id] = {
     results: {},
     status: PollStatus.CLEAR,
   };
-};
+}
 
 export function setStatus(id: string, status: PollStatus) {
-  state[id].status = status;
+  pollState[id].status = status;
   if (connectState.value === ConnectionStatus.CONNECTED) {
     webSocket.send(
       JSON.stringify({
@@ -72,11 +95,11 @@ export function setStatus(id: string, status: PollStatus) {
       })
     );
   }
-};
+}
 
 export function reset(id: string) {
-  state[id].results = {};
-  state[id].status = PollStatus.CLEAR;
+  pollState[id].results = {};
+  pollState[id].status = PollStatus.CLEAR;
   if (connectState.value === ConnectionStatus.CONNECTED) {
     webSocket.send(
       JSON.stringify({
@@ -86,12 +109,12 @@ export function reset(id: string) {
       })
     );
   }
-};
+}
 
 export function answer(id: string, result: Result | null) {
-  const poll = state[id];
+  const poll = pollState[id];
   if (poll && result !== null) {
-    state[id].results[uid.value] = result;
+    pollState[id].results[deviceId.value] = result;
     if (connectState.value === ConnectionStatus.CONNECTED) {
       webSocket.send(
         JSON.stringify({
@@ -99,9 +122,23 @@ export function answer(id: string, result: Result | null) {
           pollId: id,
           result,
           type: "answer",
-          userId: uid.value,
+          userId: deviceId.value,
         })
       );
     }
   }
-};
+}
+
+export function login(user: string) {
+  userState[deviceId.value] = user;
+  if (connectState.value === ConnectionStatus.CONNECTED) {
+    webSocket.send(
+      JSON.stringify({
+        id: groupId.value,
+        userId: deviceId.value,
+        userName: user,
+        type: "login",
+      })
+    );
+  }
+}

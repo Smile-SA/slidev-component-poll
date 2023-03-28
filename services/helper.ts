@@ -1,9 +1,15 @@
-import type { RouteRecordRaw } from "vue-router";
+import { computed } from "vue";
 import Hashids from "hashids";
-import { presenterPassword } from "@slidev/client/logic/nav";
+import { presenterPassword, isPresenter } from "@slidev/client/logic/nav";
 import { configs } from "@slidev/client/env";
 // @ts-expect-error missing types
 import rawRoutes from "/@slidev/routes";
+
+import { pollState } from "../services/state";
+import { deviceId } from "../services/user";
+import { Result } from "../types/Poll";
+
+// import { PollStatus } from '../types/PollStatus';
 
 const hashids = new Hashids();
 
@@ -13,6 +19,39 @@ export function hasControlAccess(): boolean {
 
 export function isPrivateRemoteEnabled(): boolean {
   return Boolean(configs.remote);
+}
+
+export function indexMatchResult(
+  index?: number,
+  correctAnswer?: null | string | number | number[]
+) {
+  if (index === undefined || correctAnswer === undefined) {
+    return false;
+  }
+  return correctAnswer instanceof Array
+    ? correctAnswer.includes(index)
+    : Number(correctAnswer) === index;
+}
+
+export function getDefaultValue(
+  id: string,
+  hasResult: boolean,
+  multiple?: boolean
+): null | Result {
+  const answer = pollState[id]?.results?.[deviceId.value];
+  if (hasResult) {
+    if (
+      (answer instanceof Array && multiple) ||
+      (typeof answer === "number" && !multiple)
+    ) {
+      return answer;
+    } else if (multiple && typeof answer === "number") {
+      return [answer];
+    } else if (!multiple && answer instanceof Array) {
+      return answer[0];
+    }
+  }
+  return multiple ? ([] as number[]) : null;
 }
 
 // https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
@@ -43,10 +82,14 @@ export function getHash() {
 }
 
 export function getPollServer() {
-  if (configs.pollServer) {
-    return configs.pollServer.endsWith("/")
-      ? configs.pollServer.slice(0, -1)
-      : configs.pollServer;
+  if (configs.pollSettings?.server) {
+    return configs.pollSettings.server.endsWith("/")
+      ? configs.pollSettings.server.slice(0, -1)
+      : configs.pollSettings.server;
   }
   return "";
 }
+
+export const canUseControls = computed(
+  () => hasControlAccess() && (isPrivateRemoteEnabled() || isPresenter.value)
+);

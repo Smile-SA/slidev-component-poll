@@ -1,75 +1,91 @@
 <script lang="ts" setup>
-import { computed, inject, ref, watch } from "vue";
-import { isPresenter } from "@slidev/client/logic/nav";
+import { computed, inject, onMounted, ref, watch } from "vue";
 
 import { useAnswers } from "../composables/useAnswers";
 import { idContext } from "../constants/context";
-import {
-  hasControlAccess,
-  isPrivateRemoteEnabled,
-} from "../services/helper";
-import { state } from "../services/state";
-import { uid } from "../services/user";
-import { PollResultsProp } from "../types/Poll";
+import { canUseControls } from "../services/helper";
+import { initPoll } from "../services/methods";
+import { pollState } from "../services/state";
+import { deviceId } from "../services/user";
+import { DisplayResultsProp, ShowResultsProp } from "../types/Poll";
 
 import PollControl from "./PollControl.vue";
 import PollQuestion from "./PollQuestion.vue";
 import PollResults from "./PollResults.vue";
 import PollTitle from "./PollTitle.vue";
 
-const props = defineProps<{
-  answers?: string[];
-  clearable?: boolean;
-  controlled?: boolean;
-  editable?: boolean;
-  multiple?: boolean;
-  question: string;
-  reopenable?: boolean;
-  results?: PollResultsProp;
-}>();
-const { answers, controlled = false, editable, results = "auto" } = props;
+const props = withDefaults(
+  defineProps<{
+    answers?: string[];
+    clearable?: boolean;
+    controlled?: boolean;
+    correctAnswer?: string | number | number[];
+    displayResults?: DisplayResultsProp;
+    editable?: boolean;
+    multiple?: boolean;
+    question: string;
+    reOpenable?: boolean;
+    showResults?: ShowResultsProp;
+  }>(),
+  { displayResults: "quiz", controlled: false, showResults: "auto" }
+);
 const id = inject(idContext, ref(""));
 
-const canUseControls = computed(
-  () => hasControlAccess() && (isPrivateRemoteEnabled() || isPresenter.value)
-);
-const showControls = computed(() => controlled && canUseControls.value);
+const showControls = computed(() => props.controlled && canUseControls.value);
 const hasResult = computed(
-  () => state[id.value]?.results[uid.value] !== undefined
+  () => pollState[id.value]?.results[deviceId.value] !== undefined
 );
-const showResults = ref(
-  showControls.value || (hasResult.value && results !== "none")
+const canShowResults = ref(
+  canUseControls.value || (hasResult.value && props.showResults !== "none")
 );
-const showPollButton = computed(() => canUseControls.value || editable);
+const showPollButton = computed(() => canUseControls.value || props.editable);
 const showResultsButton = computed(
   () =>
     canUseControls.value ||
-    results === "free" ||
-    (results === "auto" && hasResult.value)
+    props.showResults === "free" ||
+    (props.showResults === "auto" && hasResult.value)
 );
-useAnswers(answers);
+useAnswers(props.answers);
 
 function toggleResults() {
-  showResults.value = !showResults.value;
+  canShowResults.value = !canShowResults.value;
 }
 
-// show results when user submit a value
+// Show results when user submit a value
 watch(
-  () => state[id.value]?.results[uid.value],
+  () => pollState[id.value]?.results[deviceId.value],
   () => {
-    if (hasResult.value && results !== "none") {
-      showResults.value = true;
+    if (hasResult.value && props.showResults !== "none") {
+      canShowResults.value = true;
     }
   }
 );
+
+// Reset canShowResults when poll results are reset
+watch(
+  hasResult,
+  (newValue, oldValue) => {
+    if (!newValue && oldValue) {
+      if (!canUseControls.value && canShowResults.value) {
+        canShowResults.value = false;
+      }
+    }
+  }
+);
+
+onMounted(() => {
+  if (!pollState[id.value]) {
+    initPoll(id.value);
+  }
+});
 </script>
 
 <template>
   <div class="poll__header flex justify-between">
-    <PollTitle :id="id" :question="question" />
+    <PollTitle :question="question" />
     <button
       v-if="showPollButton"
-      v-show="showResults"
+      v-show="canShowResults"
       @click="toggleResults"
       class="poll__button underline"
     >
@@ -77,7 +93,7 @@ watch(
     </button>
     <button
       v-if="showResultsButton"
-      v-show="!showResults"
+      v-show="!canShowResults"
       @click="toggleResults"
       class="poll__button underline"
     >
@@ -85,7 +101,7 @@ watch(
     </button>
   </div>
   <PollQuestion
-    v-if="!showResults"
+    v-if="!canShowResults"
     :answers="answers"
     :controlled="controlled"
     :editable="editable"
@@ -93,10 +109,17 @@ watch(
   >
     <slot />
   </PollQuestion>
-  <PollResults v-if="showResults" :id="id" />
+  <PollResults
+    v-if="canShowResults"
+    :answers="answers"
+    :controlled="controlled"
+    :correctAnswer="correctAnswer"
+    :displayResults="displayResults"
+    :multiple="multiple"
+  />
   <PollControl
     v-if="showControls"
     :clearable="clearable"
-    :reopenable="reopenable"
+    :reOpenable="reOpenable"
   />
 </template>

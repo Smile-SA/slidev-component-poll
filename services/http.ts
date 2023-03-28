@@ -1,28 +1,33 @@
-import { reactive } from "vue";
-
-import type { PollState, Result } from "../types/Poll";
+import type { PollState, Result, UserState } from "../types/Poll";
 import { PollStatus } from "../types/PollStatus";
 import { ConnectionStatus } from "../types/ConnectionStatus";
 
 import { getPollServer } from "./helper";
 import { autoConnect, connectState, groupId } from "./server";
-import { state } from "./state";
-import { uid } from "./user";
+import { pollState, userState } from "./state";
+import { deviceId } from "./user";
+import { Resolve } from "../types/Promise";
 
-let eventSource;
+let eventSource: EventSource;
+let resolveConnected: Resolve;
 const url = getPollServer();
 
-function onMessage(event) {
+function onPollMessage(event) {
   const data = JSON.parse(event.data) as PollState;
-  Object.entries(data).forEach(([key, value]) => (state[key] = value));
+  Object.entries(data).forEach(([key, value]) => (pollState[key] = value));
+}
+
+function onUserMessage(event) {
+  const data = JSON.parse(event.data) as UserState;
+  Object.entries(data).forEach(([key, value]) => (userState[key] = value));
 }
 
 function onOpen() {
   if (groupId.value) {
-    fetch(`${url}/connect?uid=${uid.value}`, {
+    fetch(`${url}/connect?uid=${deviceId.value}`, {
       body: JSON.stringify({
         id: groupId.value,
-        state,
+        state: pollState,
       }),
       method: "POST",
       headers: {
@@ -30,6 +35,7 @@ function onOpen() {
       },
     });
     connectState.value = ConnectionStatus.CONNECTED;
+    resolveConnected()
   }
 }
 
@@ -43,8 +49,9 @@ function onClose() {
 
 function initWebSocket() {
   if (!eventSource) {
-    eventSource = new EventSource(`${url}/event?uid=${uid.value}`);
-    eventSource.addEventListener("message", onMessage);
+    eventSource = new EventSource(`${url}/event?uid=${deviceId.value}`);
+    eventSource.addEventListener("poll", onPollMessage);
+    eventSource.addEventListener("user", onUserMessage);
     eventSource.addEventListener("open", onOpen);
     eventSource.addEventListener("error", onClose);
   } else {
@@ -52,22 +59,23 @@ function initWebSocket() {
   }
 }
 
-export function connect() {
+export function connect(resolve: Resolve) {
   autoConnect.value = new Date().toISOString();
   initWebSocket();
+  resolveConnected = resolve
 }
 
 export function init(id: string) {
-  state[id] = {
+  pollState[id] = {
     results: {},
     status: PollStatus.CLEAR,
   };
 }
 
 export function setStatus(id: string, status: PollStatus) {
-  state[id].status = status;
+  pollState[id].status = status;
   if (connectState.value === ConnectionStatus.CONNECTED) {
-    fetch(`${url}/status?uid=${uid.value}`, {
+    fetch(`${url}/status?uid=${deviceId.value}`, {
       body: JSON.stringify({
         id: groupId.value,
         pollId: id,
@@ -82,10 +90,10 @@ export function setStatus(id: string, status: PollStatus) {
 }
 
 export function reset(id: string) {
-  state[id].results = {};
-  state[id].status = PollStatus.CLEAR;
+  pollState[id].results = {};
+  pollState[id].status = PollStatus.CLEAR;
   if (connectState.value === ConnectionStatus.CONNECTED) {
-    fetch(`${url}/reset?uid=${uid.value}`, {
+    fetch(`${url}/reset?uid=${deviceId.value}`, {
       body: JSON.stringify({
         id: groupId.value,
         pollId: id,
@@ -99,16 +107,16 @@ export function reset(id: string) {
 }
 
 export function answer(id: string, result: Result | null) {
-  const poll = state[id];
+  const poll = pollState[id];
   if (poll && result !== null) {
-    state[id].results[uid.value] = result;
+    pollState[id].results[deviceId.value] = result;
     if (connectState.value === ConnectionStatus.CONNECTED) {
-      fetch(`${url}/answer?uid=${uid.value}`, {
+      fetch(`${url}/answer?uid=${deviceId.value}`, {
         body: JSON.stringify({
           id: groupId.value,
           pollId: id,
           result,
-          userId: uid.value,
+          userId: deviceId.value,
         }),
         method: "POST",
         headers: {
@@ -116,5 +124,22 @@ export function answer(id: string, result: Result | null) {
         },
       });
     }
+  }
+}
+
+export function login(user: string) {
+  userState[deviceId.value] = user;
+  if (connectState.value === ConnectionStatus.CONNECTED) {
+    fetch(`${url}/login?uid=${deviceId.value}`, {
+      body: JSON.stringify({
+        id: groupId.value,
+        userId: deviceId.value,
+        userName: user,
+      }),
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
   }
 }

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { provide, ref } from 'vue';
+import { provide, ref } from "vue";
 
 import { useId } from "../composables/useId";
-import { answersContext, idContext } from '../constants/context';
+import { answersContext, idContext } from "../constants/context";
 
 const props = defineProps<{
   id?: string;
@@ -15,7 +15,7 @@ if (props.id) {
   ({ elementRef, id } = useId());
 }
 
-const answers = ref([])
+const answers = ref([]);
 
 function setAnswers(newAnswers) {
   answers.value = newAnswers;
@@ -27,6 +27,6 @@ provide(answersContext, { answers, setAnswers });
 
 <template>
   <div ref="elementRef">
-    <slot v-if="id"/>
+    <slot v-if="id" />
   </div>
 </template>

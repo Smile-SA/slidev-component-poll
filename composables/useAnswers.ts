@@ -1,4 +1,10 @@
-import { computed, inject, isVNode, onMounted, RendererNode, useSlots } from "vue";
+import {
+  computed,
+  inject,
+  onMounted,
+  RendererNode,
+  useSlots,
+} from "vue";
 
 import { answersContext } from "../constants/context";
 
@@ -8,7 +14,7 @@ export function useAnswers(answers?: string[]) {
 
   function getChildren(children: RendererNode[]) {
     if (!(children instanceof Array)) {
-      return []
+      return [];
     } else if (children instanceof Array && children.length === 1) {
       return getChildren(children[0].children);
     } else {

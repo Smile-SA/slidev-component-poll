@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 defineProps<{
-  question: string
+  question: string;
 }>();
 </script>
 
 <template>
-  <div class="poll-title text-xl mb-1">{{question}}</div>
+  <div class="poll-title text-xl mb-1">{{ question }}</div>
 </template>

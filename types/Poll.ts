@@ -1,12 +1,14 @@
-import { PollStatus } from "./PollStatus"
+import { PollStatus } from "./PollStatus";
 
-export type Result = number | number[]
+export type Result = number | number[];
 
 export interface Poll {
-  results: Record<string, Result>
-  status: PollStatus
+  results: Record<string, Result>;
+  status: PollStatus;
 }
 
-export type PollState = Record<string, Poll>
+export type PollState = Record<string, Poll>;
+export type UserState = Record<string, string>;
 
-export type PollResultsProp = 'free' | 'auto' | 'none'
+export type DisplayResultsProp = "poll" | "quiz" | "publicQuiz";
+export type ShowResultsProp = "free" | "auto" | "none";

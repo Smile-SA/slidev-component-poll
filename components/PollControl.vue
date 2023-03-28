@@ -5,15 +5,15 @@ import { isPresenter } from "@slidev/client/logic/nav";
 import { idContext } from "../constants/context";
 import { hasControlAccess } from "../services/helper";
 import { resetPoll, setPollStatus } from "../services/methods";
-import { state } from "../services/state";
+import { pollState } from "../services/state";
 import { PollStatus } from "../types/PollStatus";
 
 const props = defineProps<{
   clearable?: boolean;
   presenterOnly?: boolean;
-  reopenable?: boolean;
+  reOpenable?: boolean;
 }>();
-const id = inject(idContext, ref(''));
+const id = inject(idContext, ref(""));
 const hasAccess = hasControlAccess();
 
 function open() {
@@ -31,13 +31,13 @@ function clear() {
 
 <template>
   <div
-    v-if="state[id] && hasAccess && (!presenterOnly || isPresenter)"
+    v-if="pollState[id] && hasAccess && (!presenterOnly || isPresenter)"
     class="poll-control"
   >
     <button
       v-if="
-        state[id].status === PollStatus.CLEAR ||
-        (state[id].status === PollStatus.CLOSED && reopenable)
+        pollState[id].status === PollStatus.CLEAR ||
+        (pollState[id].status === PollStatus.CLOSED && reOpenable)
       "
       @click="open"
       class="poll-control__button p-1"
@@ -45,14 +45,14 @@ function clear() {
       Open poll
     </button>
     <button
-      v-if="state[id].status === PollStatus.OPEN"
+      v-if="pollState[id].status === PollStatus.OPEN"
       @click="close"
       class="poll-control__button p-1"
     >
       Close poll
     </button>
     <button
-      v-if="state[id].status === PollStatus.CLOSED && clearable"
+      v-if="pollState[id].status === PollStatus.CLOSED && clearable"
       @click="clear"
       class="poll-control__button p-1"
     >

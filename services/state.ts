@@ -2,8 +2,15 @@ import { reactive } from "vue";
 import { configs } from "@slidev/client/env";
 import { createSyncState } from "@slidev/client/state/syncState";
 // @ts-expect-error vite-plugin-vue-server-ref
-import pollState from "server-reactive:poll";
+import polls from "server-reactive:polls";
+// @ts-expect-error vite-plugin-vue-server-ref
+import users from "server-reactive:users";
 
-import type { PollState } from "../types/Poll";
+import type { PollState, UserState } from "../types/Poll";
 
-export const state: PollState = configs.pollServer ? reactive<PollState>({}) : createSyncState<PollState>(pollState, {}).state;
+export const pollState: PollState = configs.pollSettings?.server
+  ? reactive<PollState>({})
+  : createSyncState<PollState>(polls, {}).state;
+export const userState: UserState = configs.pollSettings?.server
+  ? reactive<UserState>({})
+  : createSyncState<UserState>(users, {}).state;

@@ -14,11 +14,11 @@ Poll component for `Slidev`.
 npm i slidev-component-poll
 ```
 
-## Configuration
+## Slidev Configuration
 
 Define this package into your slidev addons.
 
-In your slides metadata (using frontmatter):
+In your slides metadata (using Front Matter):
 ```
 ---
 addons:
@@ -68,19 +68,21 @@ You can use a Server Sent Events server or a WebSocket server to allow communica
 
 Take at look at this custom implementation: https://github.com/Smile-SA/slidev-poll-server
 
-In that case you only need to use the `pollServer` config in your markdown file frontmatter (Update the value of `pollServer` using your own installation).
+In that case you need to use the `pollSettings` config in your markdown file Front Matter to set the server URL (Update the value of `server` using your own URL).
 
 For HTTP Server Sent Events server:
 ```yaml
 ---
-pollServer: http://localhost:8080
+pollSettings:
+  server: http://localhost:8080
 ---
 ```
 
 Or for WebSocket server:
 ```yaml
 ---
-pollServer: ws://localhost:8080
+pollSettings:
+  server: ws://localhost:8080
 ---
 ```
 
@@ -95,6 +97,17 @@ Type in a hash that you can share with other peoples and press <key>enter</key>.
 You are connected!
 
 ![Connected](./assets/connected.png)
+
+### Anonymous
+
+If you prefer that users answer polls anonymously, or prefer to skip the step of defining a name, add in the Front Matter:
+
+```yaml
+---
+pollSettings:
+  anonymous: true
+---
+```
 
 ## Components
 
@@ -129,7 +142,7 @@ Parameters:
 * `editable` (`boolean`, default: `false`): Can someone's answer be edited by this same person ?
 * `multiple` (`boolean`, default: `false`): Can someone select multiple answers (displays checkbox instead of radio buttons).
 * `controlled` (`boolean`, default: `false`): If `true` the poll will not be opened at the start, use controls to open and close the poll ([see below for more information](#controlled-forms)).
-* `reopenable` (`boolean`, default: `false`): Can the poll be reopened after being closed ? (old results are kept).
+* `reOpenable` (`boolean`, default: `false`): Can the poll be reopened after being closed ? (old results are kept).
 * `clearable` (`boolean`, default: `false`): Can the poll be cleared after being closed ? (results will be cleared and poll can be reopened again).
 * `id` (`'string'`): Unique identifier for poll (if not provided, the system will generate an id based on the page number).
 * `results` (`'free' | 'auto' | 'none'`, default `'auto'`):
@@ -217,9 +230,18 @@ This component displays the controls of the poll (should be used with `controlle
 ```
 
 Parameters:
-* `reopenable` (`boolean`, default: `false`): Can the poll be reopened after being closed ? (old results are kept)
+* `reOpenable` (`boolean`, default: `false`): Can the poll be reopened after being closed ? (old results are kept)
 * `clearable` (`boolean`, default: `false`): Can the poll be cleared after being closed ? (results will be cleared and poll can be reopened again)
 * `presenterOnly` (`boolean`, default: `false`): Only display the component on the presenter page.
+
+### PollUser
+
+Sub-component used by the [`Poll` component](#poll).
+
+This component displays an input for the user to enter his/her name:
+```html
+<PollUser />
+```
 
 ### Usage
 
