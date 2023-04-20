@@ -1,7 +1,7 @@
 import { computed } from "vue";
 import Hashids from "hashids";
-import { presenterPassword, isPresenter } from "@slidev/client/logic/nav";
-import { configs } from "@slidev/client/env";
+import { presenterPassword, isPresenter } from "@slidev/client/logic/nav.ts";
+import { configs } from "@slidev/client/env.ts";
 // @ts-expect-error missing types
 import rawRoutes from "/@slidev/routes";
 

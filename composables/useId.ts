@@ -1,6 +1,6 @@
 import { inject, onMounted, onBeforeUnmount, ref, watch } from "vue";
-import { injectionRoute } from "@slidev/client/constants";
-import { isPresenter } from "@slidev/client/logic/nav";
+import { injectionRoute } from "@slidev/client/constants.ts";
+import { isPresenter } from "@slidev/client/logic/nav.ts";
 
 import { SlideContext } from "../types/SlideContext";
 

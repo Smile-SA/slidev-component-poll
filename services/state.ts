@@ -1,6 +1,6 @@
 import { reactive } from "vue";
-import { configs } from "@slidev/client/env";
-import { createSyncState } from "@slidev/client/state/syncState";
+import { configs } from "@slidev/client/env.ts";
+import { createSyncState } from "@slidev/client/state/syncState.ts";
 // @ts-expect-error vite-plugin-vue-server-ref
 import polls from "server-reactive:polls";
 // @ts-expect-error vite-plugin-vue-server-ref

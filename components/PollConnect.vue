@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { configs } from "@slidev/client/env";
+import { configs } from "@slidev/client/env.ts";
 import { computed, onMounted, ref, watch } from "vue";
 import VerticalDivider from "@slidev/client/internals/VerticalDivider.vue";
 

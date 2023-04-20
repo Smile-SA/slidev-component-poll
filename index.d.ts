@@ -1,5 +1,5 @@
-import type { SharedState } from "@slidev/client/state/shared";
-import type { SlidevConfig } from "@slidev/types";
+import type { SharedState } from "@slidev/client/state/shared.ts";
+import type { SlidevConfig } from "@slidev/types.ts";
 
 import type { State } from './types/Poll';
 

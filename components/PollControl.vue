@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, ref } from "vue";
-import { isPresenter } from "@slidev/client/logic/nav";
+import { isPresenter } from "@slidev/client/logic/nav.ts";
 
 import { idContext } from "../constants/context";
 import { hasControlAccess } from "../services/helper";

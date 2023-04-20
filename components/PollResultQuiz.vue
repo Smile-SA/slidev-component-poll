@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { configs } from "@slidev/client/env";
+import { configs } from "@slidev/client/env.ts";
 import { computed, inject, ref } from "vue";
 
 import { idContext } from "../constants/context";
