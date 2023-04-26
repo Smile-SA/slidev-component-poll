@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { provide, ref } from "vue";
 
-import { useId } from "../composables/useId";
-import { answersContext, idContext } from "../constants/context";
+import { useId } from "../composables/useId.ts";
+import { answersContext, idContext } from "../constants/context.ts";
 
 const props = defineProps<{
   id?: string;

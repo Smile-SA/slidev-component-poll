@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject, isVNode, ref } from "vue";
 
-import { useAnswers } from "../composables/useAnswers";
-import { idContext } from "../constants/context";
+import { useAnswers } from "../composables/useAnswers.ts";
+import { idContext } from "../constants/context.ts";
 
 import PollResultQuiz from "./PollResultQuiz.vue";
 

@@ -2,7 +2,7 @@ import { inject, onMounted, onBeforeUnmount, ref, watch } from "vue";
 import { injectionRoute } from "@slidev/client/constants.ts";
 import { isPresenter } from "@slidev/client/logic/nav.ts";
 
-import { SlideContext } from "../types/SlideContext";
+import { SlideContext } from "../types/SlideContext.ts";
 
 const lastPageIds: Record<string, number> = {};
 

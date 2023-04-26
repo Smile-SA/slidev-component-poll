@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, ref, watch } from "vue";
 
-import { useAnswers } from "../composables/useAnswers";
-import { idContext } from "../constants/context";
-import { canUseControls } from "../services/helper";
-import { initPoll } from "../services/methods";
-import { pollState } from "../services/state";
-import { deviceId } from "../services/user";
-import { DisplayResultsProp, ShowResultsProp } from "../types/Poll";
+import { useAnswers } from "../composables/useAnswers.ts";
+import { idContext } from "../constants/context.ts";
+import { canUseControls } from "../services/helper.ts";
+import { initPoll } from "../services/methods.ts";
+import { pollState } from "../services/state.ts";
+import { deviceId } from "../services/user.ts";
+import { DisplayResultsProp, ShowResultsProp } from "../types/Poll.ts";
 
 import PollControl from "./PollControl.vue";
 import PollQuestion from "./PollQuestion.vue";

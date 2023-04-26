@@ -2,10 +2,10 @@
 import { computed, inject, ref, watch } from "vue";
 import { useSpring } from "@vueuse/motion";
 
-import { idContext } from "../constants/context";
-import { indexMatchResult } from "../services/helper";
-import { pollState } from "../services/state";
-import { PollStatus } from "../types/PollStatus";
+import { idContext } from "../constants/context.ts";
+import { indexMatchResult } from "../services/helper.ts";
+import { pollState } from "../services/state.ts";
+import { PollStatus } from "../types/PollStatus.ts";
 
 const props = defineProps<{
   controlled?: boolean;

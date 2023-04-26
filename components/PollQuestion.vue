@@ -2,14 +2,14 @@
 import { configs } from "@slidev/client/env.ts";
 import { computed, inject, isVNode, ref } from "vue";
 
-import { useAnswers } from "../composables/useAnswers";
-import { idContext } from "../constants/context";
-import { getDefaultValue } from "../services/helper";
-import { answerPoll } from "../services/methods";
-import { pollState } from "../services/state";
-import { deviceId, userId } from "../services/user";
-import { Result } from "../types/Poll";
-import { PollStatus } from "../types/PollStatus";
+import { useAnswers } from "../composables/useAnswers.ts";
+import { idContext } from "../constants/context.ts";
+import { getDefaultValue } from "../services/helper.ts";
+import { answerPoll } from "../services/methods.ts";
+import { pollState } from "../services/state.ts";
+import { deviceId, userId } from "../services/user.ts";
+import { Result } from "../types/Poll.ts";
+import { PollStatus } from "../types/PollStatus.ts";
 
 import PollUser from "./PollUser.vue";
 

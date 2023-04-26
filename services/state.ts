@@ -6,7 +6,7 @@ import polls from "server-reactive:polls";
 // @ts-expect-error vite-plugin-vue-server-ref
 import users from "server-reactive:users";
 
-import type { PollState, UserState } from "../types/Poll";
+import type { PollState, UserState } from "../types/Poll.ts";
 
 export const pollState: PollState = configs.pollSettings?.server
   ? reactive<PollState>({})

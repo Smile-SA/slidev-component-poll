@@ -2,11 +2,11 @@
 import { inject, ref } from "vue";
 import { isPresenter } from "@slidev/client/logic/nav.ts";
 
-import { idContext } from "../constants/context";
-import { hasControlAccess } from "../services/helper";
-import { resetPoll, setPollStatus } from "../services/methods";
-import { pollState } from "../services/state";
-import { PollStatus } from "../types/PollStatus";
+import { idContext } from "../constants/context.ts";
+import { hasControlAccess } from "../services/helper.ts";
+import { resetPoll, setPollStatus } from "../services/methods.ts";
+import { pollState } from "../services/state.ts";
+import { PollStatus } from "../types/PollStatus.ts";
 
 const props = defineProps<{
   clearable?: boolean;

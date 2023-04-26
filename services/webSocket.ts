@@ -1,12 +1,12 @@
-import type { PollState, Result, UserState } from "../types/Poll";
-import { PollStatus } from "../types/PollStatus";
-import { ConnectionStatus } from "../types/ConnectionStatus";
+import type { PollState, Result, UserState } from "../types/Poll.ts";
+import { PollStatus } from "../types/PollStatus.ts";
+import { ConnectionStatus } from "../types/ConnectionStatus.ts";
+import { Resolve } from "../types/Promise.ts";
 
-import { getPollServer } from "./helper";
-import { autoConnect, connectState, groupId } from "./server";
-import { pollState, userState } from "./state";
-import { deviceId } from "./user";
-import { Resolve } from "../types/Promise";
+import { getPollServer } from "./helper.ts";
+import { autoConnect, connectState, groupId } from "./server.ts";
+import { pollState, userState } from "./state.ts";
+import { deviceId } from "./user.ts";
 
 enum SendType {
   POLL = "poll",

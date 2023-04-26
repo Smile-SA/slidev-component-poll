@@ -1,4 +1,4 @@
-import { PollStatus } from "./PollStatus";
+import { PollStatus } from "./PollStatus.ts";
 
 export type Result = number | number[];
 

@@ -1,11 +1,11 @@
 import { configs } from "@slidev/client/env.ts";
 
-import type { Result } from "../types/Poll";
-import { PollStatus } from "../types/PollStatus";
-import { Resolve } from "../types/Promise";
+import type { Result } from "../types/Poll.ts";
+import { PollStatus } from "../types/PollStatus.ts";
+import { Resolve } from "../types/Promise.ts";
 
-import { pollState, userState } from "./state";
-import { deviceId } from "./user";
+import { pollState, userState } from "./state.ts";
+import { deviceId } from "./user.ts";
 
 let connect: (resolve: Resolve) => void;
 let setStatus: (id: string, status: PollStatus) => void;
