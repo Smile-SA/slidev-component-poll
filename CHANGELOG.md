@@ -1,3 +1,9 @@
+#### 2.0.1 (2023-04-26)
+
+##### Bug Fixes
+
+*  vite 4.3 compatibility ([fd05e669](https://github.com/Smile-SA/slidev-component-poll/commit/fd05e669f5b4dc9da9008303e42309e9c3e639bf))
+
 ## 2.0.0 (2023-04-20)
 
 ##### New Features
