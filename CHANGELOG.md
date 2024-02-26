@@ -1,3 +1,13 @@
+#### 2.0.2 (2024-02-26)
+
+##### Chores
+
+*  update license ([65f4870a](https://github.com/Smile-SA/slidev-component-poll/commit/65f4870adffae8bd54862995d3945dc8f701ac55))
+
+##### Bug Fixes
+
+*  package.json published files ([dd8ba9a3](https://github.com/Smile-SA/slidev-component-poll/commit/dd8ba9a3b068da7b5e0aa6f19b996a76b39a7969))
+
 #### 2.0.1 (2023-04-26)
 
 ##### Bug Fixes
