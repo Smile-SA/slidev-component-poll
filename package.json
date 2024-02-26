@@ -13,9 +13,9 @@
   "files": [
     "components/*",
     "composables/*",
-    "enums/*",
-    "interfaces/*",
-    "services/*"
+    "constants/*",
+    "services/*",
+    "types/*"
   ],
   "scripts": {
     "dev": "slidev example.md --open",

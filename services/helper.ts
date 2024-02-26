@@ -5,11 +5,10 @@ import { configs } from "@slidev/client/env.ts";
 // @ts-expect-error missing types
 import rawRoutes from "/@slidev/routes";
 
-import { pollState } from "../services/state.ts";
-import { deviceId } from "../services/user.ts";
 import { Result } from "../types/Poll.ts";
 
-// import { PollStatus } from '../types/PollStatus';
+import { pollState } from "./state.ts";
+import { deviceId } from "./user.ts";
 
 const hashids = new Hashids();
 
