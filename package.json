@@ -10,13 +10,6 @@
   "bugs": {
     "url": "https://github.com/Smile-SA/slidev-component-poll/issues"
   },
-  "files": [
-    "components/*",
-    "composables/*",
-    "constants/*",
-    "services/*",
-    "types/*"
-  ],
   "scripts": {
     "dev": "slidev example.md --open",
     "build": "slidev build example.md",
