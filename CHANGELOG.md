@@ -1,3 +1,9 @@
+#### 2.0.3 (2024-02-27)
+
+##### Bug Fixes
+
+*  remove files declaration from package.json ([4118c0b7](https://github.com/Smile-SA/slidev-component-poll/commit/4118c0b7b689f487d813a6e6261ba99809e69586))
+
 #### 2.0.2 (2024-02-26)
 
 ##### Chores
