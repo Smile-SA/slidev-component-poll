@@ -1,16 +1,19 @@
 import { computed } from "vue";
 import Hashids from "hashids";
-import { presenterPassword, isPresenter } from "@slidev/client/logic/nav.ts";
+import { useNav } from "@slidev/client";
 import { configs } from "@slidev/client/env.ts";
-// @ts-expect-error missing types
-import rawRoutes from "/@slidev/routes";
+import { slides } from "#slidev/slides";
 
 import { Result } from "../types/Poll.ts";
 
 import { pollState } from "./state.ts";
 import { deviceId } from "./user.ts";
 
+const { isPresenter, currentRoute } = useNav();
+
 const hashids = new Hashids();
+
+const presenterPassword = computed(() => currentRoute.value.query.password);
 
 export function hasControlAccess(): boolean {
   return !configs.remote || configs.remote === presenterPassword.value;
@@ -74,10 +77,10 @@ function cyrb53(str: string, seed = 0) {
 }
 
 export function getHash() {
-  const slides = rawRoutes
-    .map((route) => route?.meta?.slide?.raw ?? "")
+  const slideRaws = slides.value
+    .map((route) => route?.meta?.slide?.content ?? "")
     .join("\n");
-  return hashids.encode(cyrb53(slides));
+  return hashids.encode(cyrb53(slideRaws));
 }
 
 export function getPollServer() {
