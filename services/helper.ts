@@ -1,7 +1,6 @@
 import { computed } from "vue";
 import Hashids from "hashids";
-import { useNav } from "@slidev/client";
-import { configs } from "@slidev/client/env.ts";
+import { configs, useNav } from "@slidev/client";
 import { slides } from "#slidev/slides";
 
 import { Result } from "../types/Poll.ts";

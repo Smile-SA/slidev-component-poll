@@ -1,4 +1,4 @@
-import { configs } from "@slidev/client/env.ts";
+import { configs } from "@slidev/client";
 
 import type { Result } from "../types/Poll.ts";
 import { PollStatus } from "../types/PollStatus.ts";
