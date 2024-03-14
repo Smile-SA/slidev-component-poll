@@ -8,11 +8,11 @@ const props = defineProps<{
   id?: string;
 }>();
 
-let elementRef, id;
+let id;
 if (props.id) {
   id = ref(props.id);
 } else if (!id) {
-  ({ elementRef, id } = useId());
+  ({ id } = useId());
 }
 
 const answers = ref([]);
@@ -26,7 +26,7 @@ provide(answersContext, { answers, setAnswers });
 </script>
 
 <template>
-  <div ref="elementRef">
+  <div>
     <slot v-if="id" />
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { configs } from "@slidev/client/env.ts";
+import { configs } from "@slidev/client";
 </script>
 
 <template>

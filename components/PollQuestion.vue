@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { configs } from "@slidev/client/env.ts";
+import { configs } from "@slidev/client";
 import { computed, inject, isVNode, ref } from "vue";
 
 import { useAnswers } from "../composables/useAnswers.ts";

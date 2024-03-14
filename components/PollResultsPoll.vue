@@ -7,10 +7,12 @@ import { pollState } from "../services/state.ts";
 
 import PollResultPoll from "./PollResultPoll.vue";
 
-defineProps<{
+const props = defineProps<{
   controlled?: boolean;
   correctAnswer?: string | number | number[];
+  multiple?: boolean;
 }>();
+
 const id = inject(idContext, ref(""));
 
 const context = inject(answersContext);
@@ -21,23 +23,28 @@ const renderAnswers = computed(() => {
   return [];
 });
 
+const poll = computed(() => pollState[id.value]);
+
 const counts = computed<number[]>(() => {
-  const poll = pollState[id.value];
-  if (poll) {
-    return renderAnswers.value?.map((_: unknown, i: number) =>
-      Object.values(poll.results).reduce(
-        (acc: number, result) =>
-          acc +
-          Number(
-            result instanceof Array ? result.indexOf(i) > -1 : result === i
-          ),
-        0
-      )
-    );
-  }
-  return [];
+  if (!poll.value) return [];
+
+  return renderAnswers.value?.map((_: unknown, i: number) =>
+    Object.values(poll.value.results).reduce(
+      (acc: number, result) =>
+        acc +
+        Number(
+          result instanceof Array ? result.indexOf(i) > -1 : result === i
+        ),
+      0
+    )
+  );
 });
-const total = computed<number>(() => counts.value.reduce((a, b) => a + b, 0));
+
+const total = computed<number>(() => {
+  if (props.multiple) return Object.keys(poll.value.results).length;
+  return counts.value.reduce((a, b) => a + b, 0);
+});
+
 const percentages = computed<number[]>(() =>
   counts.value.map((count) =>
     total.value === 0 ? 0 : (count / total.value) * 100

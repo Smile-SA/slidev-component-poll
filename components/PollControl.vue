@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, ref } from "vue";
-import { isPresenter } from "@slidev/client/logic/nav.ts";
+import { useNav } from "@slidev/client";
 
 import { idContext } from "../constants/context.ts";
 import { hasControlAccess } from "../services/helper.ts";
@@ -13,6 +13,9 @@ const props = defineProps<{
   presenterOnly?: boolean;
   reOpenable?: boolean;
 }>();
+
+const { isPresenter } = useNav();
+
 const id = inject(idContext, ref(""));
 const hasAccess = hasControlAccess();
 

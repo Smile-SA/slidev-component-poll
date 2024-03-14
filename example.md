@@ -38,13 +38,13 @@ theme: default
 
 ---
 
-## Mutiple poll
+## Multiple poll
 
 <Poll question="What are your favorite colors ?" :answers="['Red', 'Green', 'Blue']" displayResults="poll" :multiple="true" />
 
 ---
 
-## Mutiple quiz
+## Multiple quiz
 
 <Poll question="What are your favorite colors ?" :answers="['Red', 'Green', 'Blue']" :correctAnswer="[0,2]" :multiple="true" />
 
@@ -77,3 +77,9 @@ theme: default
 ## Controlled clearable poll
 
 <Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :controlled="true" :clearable="true" displayResults="poll" />
+
+---
+
+## Controlled clearable multiple poll
+
+<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :controlled="true" :multiple="true" :clearable="true" displayResults="poll" />
