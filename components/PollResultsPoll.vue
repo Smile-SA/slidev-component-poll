@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { computed, inject, isVNode, ref } from "vue";
 
-import { answersContext } from "../constants/context.ts";
-import { idContext } from "../constants/context.ts";
-import { pollState } from "../services/state.ts";
+import { answersContext } from "../constants/context";
+import { idContext } from "../constants/context";
+import { pollState } from "../services/state";
 
 import PollResultPoll from "./PollResultPoll.vue";
 

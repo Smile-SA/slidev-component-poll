@@ -2,15 +2,12 @@
 import { configs } from "@slidev/client";
 import { computed, inject, ref } from "vue";
 
-import { idContext } from "../constants/context.ts";
-import {
-  canUseControls,
-  getDefaultValue,
-  indexMatchResult,
-} from "../services/helper.ts";
-import { pollState, userState } from "../services/state.ts";
-import { deviceId } from "../services/user.ts";
-import { PollStatus } from "../types/PollStatus.ts";
+import { idContext } from "../constants/context";
+import { getDefaultValue, indexMatchResult } from "../services/helper";
+import { canUseControls } from "../services/utils";
+import { pollState, userState } from "../services/state";
+import { deviceId } from "../services/user";
+import { PollStatus } from "../types/PollStatus";
 
 const props = defineProps<{
   controlled?: boolean;

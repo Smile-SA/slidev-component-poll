@@ -33,11 +33,11 @@
     "slidev": ">=0.48.0"
   },
   "peerDependencies": {
-    "@slidev/client": "^0.48.2",
+    "@slidev/client": "^0.48.0",
     "vue": "^3.2.34"
   },
   "devDependencies": {
-    "@slidev/cli": "^0.48.2",
+    "@slidev/cli": "^0.48.0",
     "@slidev/theme-default": "latest",
     "@types/uuid": "^8.3.4",
     "@vueuse/shared": "^8.5.0",

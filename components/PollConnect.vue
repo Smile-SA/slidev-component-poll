@@ -3,9 +3,9 @@ import { configs } from "@slidev/client";
 import { computed, onMounted, ref, watch } from "vue";
 import VerticalDivider from "@slidev/client/internals/VerticalDivider.vue";
 
-import { connectPoll } from "../services/methods.ts";
-import { autoConnect, connectState, groupId } from "../services/server.ts";
-import { ConnectionStatus } from "../types/ConnectionStatus.ts";
+import { connectPoll } from "../services/methods";
+import { autoConnect, connectState, groupId } from "../services/server";
+import { ConnectionStatus } from "../types/ConnectionStatus";
 
 const input = ref<HTMLInputElement>();
 const isOpen = ref(false);

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { inject, ref } from "vue";
 
-import { idContext } from "../constants/context.ts";
-import { canUseControls } from "../services/helper.ts";
-import { pollState } from "../services/state.ts";
-import { DisplayResultsProp } from "../types/Poll.ts";
-import { PollStatus } from "../types/PollStatus.ts";
+import { idContext } from "../constants/context";
+import { canUseControls } from "../services/utils";
+import { pollState } from "../services/state";
+import { DisplayResultsProp } from "../types/Poll";
+import { PollStatus } from "../types/PollStatus";
 
 import PollResultsPoll from "./PollResultsPoll.vue";
 import PollResultsQuiz from "./PollResultsQuiz.vue";

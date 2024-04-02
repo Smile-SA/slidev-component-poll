@@ -26,7 +26,7 @@ export function useAnswers(answers?: string[]) {
     if (answers) {
       return answers;
     } else if (slots.default) {
-      return getChildren(slots.default?.());
+      return getChildren(slots.default?.()).map(String);
     }
     return [];
   }

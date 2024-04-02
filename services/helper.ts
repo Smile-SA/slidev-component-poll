@@ -1,6 +1,5 @@
-import { computed } from "vue";
 import Hashids from "hashids";
-import { configs, useNav } from "@slidev/client";
+import { configs } from "@slidev/client";
 import { slides } from "#slidev/slides";
 
 import { Result } from "../types/Poll.ts";
@@ -8,19 +7,7 @@ import { Result } from "../types/Poll.ts";
 import { pollState } from "./state.ts";
 import { deviceId } from "./user.ts";
 
-const { isPresenter, currentRoute } = useNav();
-
 const hashids = new Hashids();
-
-const presenterPassword = computed(() => currentRoute.value.query.password);
-
-export function hasControlAccess(): boolean {
-  return !configs.remote || configs.remote === presenterPassword.value;
-}
-
-export function isPrivateRemoteEnabled(): boolean {
-  return Boolean(configs.remote);
-}
 
 export function indexMatchResult(
   index?: number,
@@ -90,7 +77,3 @@ export function getPollServer() {
   }
   return "";
 }
-
-export const canUseControls = computed(
-  () => hasControlAccess() && (isPrivateRemoteEnabled() || isPresenter.value)
-);
