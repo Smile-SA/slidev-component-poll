@@ -1,43 +1,38 @@
-import { inject, onMounted, onBeforeUnmount, ref, watch } from "vue";
-import { injectionRoute } from "@slidev/client/constants.ts";
-import { isPresenter } from "@slidev/client/logic/nav.ts";
+import { onMounted, onBeforeUnmount, ref, computed } from "vue";
+import { useSlideContext } from "@slidev/client";
 
 import { SlideContext } from "../types/SlideContext.ts";
 
 const lastPageIds: Record<string, number> = {};
 
 export function useId() {
-  const elementRef = ref();
-  const route = inject(injectionRoute);
+  const { $route, $renderContext } = useSlideContext();
+
   const id = ref<string>("");
   let slideContext = SlideContext.MAIN;
 
-  onMounted(() => {
-    if (isPresenter.value) {
-      slideContext = SlideContext.PRESENTER_MAIN;
-      if (elementRef.value.closest(".next")) {
-        slideContext = SlideContext.PRESENTER_NEXT;
-      } else if (elementRef.value.closest(".slides-overview")) {
-        slideContext = SlideContext.PRESENTER_OVERVIEW;
-      }
-    } else if (elementRef.value.closest(".slides-overview")) {
-      slideContext = SlideContext.OVERVIEW;
-    }
+  const path = computed(() => $route?.no!);
 
-    const path = route?.path;
-    const pathVariant = `${slideContext}-${path}`;
+  onMounted(() => {
+    if ($renderContext.value === "presenter")
+      slideContext = SlideContext.PRESENTER_MAIN;
+    if ($renderContext.value === "overview")
+      slideContext = SlideContext.PRESENTER_OVERVIEW;
+    if ($renderContext.value === "previewNext")
+      slideContext = SlideContext.PRESENTER_NEXT;
+
+    const pathVariant = `${slideContext}-${path.value}`;
     const lastPageId = (lastPageIds[pathVariant] || 0) + 1;
     lastPageIds[pathVariant] = lastPageId;
-    id.value = `${path}-${lastPageId}`;
+    id.value = `${path.value}-${lastPageId}`;
   });
 
   onBeforeUnmount(() => {
-    const path = route?.path;
-    const pathVariant = `${slideContext}-${path}`;
+    const pathVariant = `${slideContext}-${path.value}`;
     if (lastPageIds[pathVariant]) {
       delete lastPageIds[pathVariant];
     }
   });
 
-  return { elementRef, id };
+  return { id };
 }

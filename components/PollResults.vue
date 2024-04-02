@@ -36,6 +36,7 @@ const id = inject(idContext, ref(""));
         v-if="displayResults === 'poll'"
         :controlled="controlled"
         :correctAnswer="correctAnswer"
+        :multiple="multiple"
       />
       <PollResultsQuiz
         v-else-if="displayResults === 'quiz' || displayResults === 'publicQuiz'"

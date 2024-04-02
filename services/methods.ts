@@ -1,11 +1,11 @@
-import { configs } from "@slidev/client/env.ts";
+import { configs } from "@slidev/client";
 
 import type { Result } from "../types/Poll.ts";
 import { PollStatus } from "../types/PollStatus.ts";
 import { Resolve } from "../types/Promise.ts";
 
 import { pollState, userState } from "./state.ts";
-import { deviceId } from "./user.ts";
+import { deviceId, onUserLogin } from "./user.ts";
 
 let connect: (resolve: Resolve) => void;
 let setStatus: (id: string, status: PollStatus) => void;
@@ -55,6 +55,7 @@ export async function loginPoll(user: string) {
   await connectedPromise;
   login?.(user);
 }
+onUserLogin(loginPoll);
 
 export async function resetPoll(id: string) {
   pollState[id].results = {};
