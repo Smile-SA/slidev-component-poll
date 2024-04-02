@@ -1,3 +1,24 @@
+### 2.1.0 (2024-04-02)
+
+##### Chores
+
+*  move to pnpm ([171c0ee6](https://github.com/Smile-SA/slidev-component-poll/commit/171c0ee6e564defddc9c983768bb8715d0008523))
+
+##### New Features
+
+*  count total in multiple poll as number of voters ([0ff7205e](https://github.com/Smile-SA/slidev-component-poll/commit/0ff7205e05dd4cd8007fe50d03e27f4ee431c86f))
+
+##### Bug Fixes
+
+*  imports ([294b79b1](https://github.com/Smile-SA/slidev-component-poll/commit/294b79b1f902a2b0adb482e515ea557b50467689))
+*  adapt breaking changes ([538b071b](https://github.com/Smile-SA/slidev-component-poll/commit/538b071ba35b23a6b48d747286f742a018286287))
+*  avoid import loop ([db77be3a](https://github.com/Smile-SA/slidev-component-poll/commit/db77be3a8dea3557e22d09adb3f3532cab2d565e))
+*  update slidev to 0.48.x, adapt breaking changes ([d45b6568](https://github.com/Smile-SA/slidev-component-poll/commit/d45b656828f0297a6376ef75ea97309130ce9951))
+
+##### Refactors
+
+*  correct imports ([9400a04c](https://github.com/Smile-SA/slidev-component-poll/commit/9400a04c303d5a467183bc1adc953e4235b8cd53))
+
 #### 2.0.3 (2024-02-27)
 
 ##### Bug Fixes
