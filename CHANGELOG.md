@@ -1,3 +1,9 @@
+#### 2.1.1 (2024-04-18)
+
+##### Bug Fixes
+
+*  render answers with HTML slot ([a3d9cbfc](https://github.com/Smile-SA/slidev-component-poll/commit/a3d9cbfcba31e67b7815f51e7db3d5ab660b9d46))
+
 ### 2.1.0 (2024-04-02)
 
 ##### Chores
