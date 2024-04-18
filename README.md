@@ -156,9 +156,35 @@ Or with markdown answers:
 
 ```html
 <Poll question="What is your favorite color ?">
-  **Red** **Green** **Blue**
+
+**Red**
+
+**Green**
+
+**Blue**
+
 </Poll>
 ```
+
+More advanced example:
+
+````html
+<Poll question="What is your favorite color ?">
+
+```js
+() => 'Red';
+```
+
+```js
+() => 'Green';
+```
+
+```js
+() => 'Blue';
+```
+
+</Poll>
+````
 
 Parameters:
 
