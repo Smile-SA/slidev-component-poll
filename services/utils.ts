@@ -1,7 +1,8 @@
 import { computed } from "vue";
 import { configs, useNav } from "@slidev/client";
 
-const { isPresenter, currentRoute } = useNav();
+const nav = useNav();
+const { isPresenter, currentRoute } = nav
 
 const presenterPassword = computed(() => currentRoute.value.query.password);
 

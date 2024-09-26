@@ -2,12 +2,17 @@
 import { configs } from "@slidev/client";
 import { computed, inject, ref } from "vue";
 
-import { idContext } from "../constants/context";
-import { getDefaultValue, indexMatchResult } from "../services/helper";
-import { canUseControls } from "../services/utils";
-import { pollState, userState } from "../services/state";
-import { deviceId } from "../services/user";
-import { PollStatus } from "../types/PollStatus";
+import { idContext } from "../constants";
+import {
+  canUseControls,
+  deviceId,
+  getDefaultValue,
+  indexMatchResult,
+  isEnabled,
+  pollState,
+  userState,
+} from "../services";
+import { PollStatus } from "../types";
 
 const props = defineProps<{
   controlled?: boolean;
@@ -19,16 +24,16 @@ const props = defineProps<{
 const id = inject(idContext, ref(""));
 
 const hasResult = computed(
-  () => pollState[id.value]?.results[deviceId.value] !== undefined
+  () => pollState[id.value]?.results[deviceId.value] !== undefined,
 );
 const users = computed(() =>
   Object.entries(pollState[id.value]?.results)
     .filter(([, result]) => indexMatchResult(props.index, result))
     .map(([deviceId]) => userState[deviceId])
-    .join(", ")
+    .join(", "),
 );
 const isCorrect = computed(() =>
-  indexMatchResult(props.index, props.correctAnswer)
+  indexMatchResult(props.index, props.correctAnswer),
 );
 const downplayed = computed(() => {
   if (!props.controlled || pollState[id.value].status === PollStatus.CLOSED) {
@@ -52,7 +57,7 @@ const downplayed = computed(() => {
       <input
         v-if="!canUseControls"
         :type="multiple ? 'checkbox' : 'radio'"
-        :checked="getDefaultValue(id, hasResult, multiple) === index"
+        :checked="isEnabled(getDefaultValue(id, hasResult, multiple), index)"
         class="mr-1"
         disabled
       />

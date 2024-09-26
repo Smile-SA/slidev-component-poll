@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 
-import { loginPoll } from "../services/methods";
-import { userState } from "../services/state";
-import { deviceId, userId } from "../services/user";
+import { deviceId, loginPoll, userId, userState } from "../services";
 
 const user = ref(userId.value);
 const exist = computed(() =>

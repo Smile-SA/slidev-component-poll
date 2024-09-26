@@ -1,10 +1,11 @@
 import { onMounted, onBeforeUnmount, ref, computed } from "vue";
 import { useSlideContext } from "@slidev/client";
 
-import { SlideContext } from "../types/SlideContext.ts";
+import { SlideContext } from "../types";
 
 const lastPageIds: Record<string, number> = {};
 
+// Generate an id for a poll
 export function useId() {
   const { $route, $renderContext } = useSlideContext();
 
@@ -34,5 +35,5 @@ export function useId() {
     }
   });
 
-  return { id };
+  return id;
 }

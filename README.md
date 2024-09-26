@@ -58,8 +58,8 @@ export default defineConfig({
   slidev: {
     serverRef: {
       state: {
-        polls: {},
-        users: {},
+        poll: {},
+        pollUsers: {},
       },
     },
   },
@@ -68,59 +68,30 @@ export default defineConfig({
 
 ### Using a server
 
-You can use a Server Sent Events server or a WebSocket server to allow communication with multiple clients.
+You can use a both:
+* [slidev-addon-sync](https://github.com/Smile-SA/slidev-addon-sync)
+* and [slidev-sync-server](https://github.com/Smile-SA/slidev-sync-server)
 
-Take at look at this custom implementation: https://github.com/Smile-SA/slidev-poll-server
+to allow communication with multiple clients that will works for static builds.
 
-In that case you need to use the `pollSettings` config in your markdown file Front Matter to set the server URL (Update the value of `server` using your own URL).
+This addon use 2 channels for the state:
 
-For HTTP Server Sent Events server:
+* `poll`: state containing the poll results
+* `pollUsers`: state containing the poll user names
 
-```yaml
----
-pollSettings:
-  server: http://localhost:8080
----
-```
-
-Or for WebSocket server:
+So you will need to configure `slidev-addon-sync` in your markdown file Front Matter with the following `syncStates` configuration:
 
 ```yaml
 ---
-pollSettings:
-  server: ws://localhost:8080
----
-```
-
-Then, in the presentation, click on the connect icon.
-
-![Connect control icon](./assets/control-icon.png)
-
-Type in a hash that you can share with other peoples and press <key>enter</key>. (you can use the proposed hash: everybody that are on the same presentation will have the same)
-
-![Connect control hash](./assets/control-hash.png)
-
-You are connected!
-
-![Connected](./assets/connected.png)
-
-You can also use the `autoConnect` settings to automatically connect to the server:
-
-```yaml
----
-pollSettings:
-  server: http://localhost:8080
-  autoConnect: true
----
-```
-
-Or provide a number of seconds. In that case you will need to connect the first time, and then if you refresh the page it will automatically reconnect you if the number of seconds since the last connection has not been elapsed:
-
-```yaml
----
-pollSettings:
-  server: http://localhost:8080
-  autoConnect: 86400 # one day
+syncStates:
+  poll:
+    presenter: false
+    init: false
+  pollUsers:
+    presenter: false
+  # Add the following lines if you want to also sync slidev channels
+  shared: ["page", "clicks", "cursor", "lastUpdate"]
+  drawings: true
 ---
 ```
 
@@ -138,8 +109,6 @@ pollSettings:
 ## Components
 
 You can create a poll by using the [`Poll` component](#poll).
-
-But if this component does not suit your needs, you can use individual [sub-components](#sub-components).
 
 ### Poll
 

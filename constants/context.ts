@@ -1,6 +1,6 @@
-import type { InjectionKey, Ref, VNodeArrayChildren } from "vue";
+import type { InjectionKey, Ref, RendererNode, VNodeArrayChildren } from "vue";
 
-export type Answers = string[] | VNodeArrayChildren;
+export type Answers = string[] | RendererNode[] // VNodeArrayChildren;
 
 export interface AnswersContext {
   answers: Ref<Answers>;

@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { computed, inject, isVNode, ref } from "vue";
 
-import { answersContext } from "../constants/context";
-import { idContext } from "../constants/context";
-import { pollState } from "../services/state";
+import { answersContext, idContext } from "../constants";
+import { pollState } from "../services";
 
 import PollResultPoll from "./PollResultPoll.vue";
 
@@ -54,7 +53,7 @@ const max = computed(() => Math.max(...counts.value));
 </script>
 
 <template>
-  <ul v-if="pollState[id]" class="poll-results">
+  <ul v-if="poll" class="poll-results">
     <PollResultPoll
       v-for="(answer, index) in renderAnswers"
       :controlled="controlled"

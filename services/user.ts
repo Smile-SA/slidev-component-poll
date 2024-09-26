@@ -9,17 +9,13 @@ export const userId = useStorage(
   userState[deviceId.value] ?? ""
 );
 
-type Listener = (userId: string) => Promise<void>;
-const listeners: Listener[] = [];
+export async function loginPoll(user: string) {
+  userState[deviceId.value] = user;
+}
 
-export const onUserLogin = (listener: Listener) => {
-  listeners.push(listener);
-};
-
+//  auto-connect if user exist
 setTimeout(() => {
   if (userId && !userState[deviceId.value]) {
-    listeners.forEach((listener) => {
-      listener(userId.value);
-    });
+    loginPoll(userId.value);
   }
-});
+})

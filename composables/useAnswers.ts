@@ -6,8 +6,9 @@ import {
   useSlots,
 } from "vue";
 
-import { answersContext } from "../constants/context.ts";
+import { answersContext } from "../constants";
 
+// Set/get answers in/from the context
 export function useAnswers(answers?: string[]) {
   const context = inject(answersContext);
   const slots = useSlots();

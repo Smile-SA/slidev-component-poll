@@ -2,12 +2,9 @@
 import { computed, inject, onMounted, ref, watch } from "vue";
 
 import { useAnswers } from "../composables/useAnswers";
-import { idContext } from "../constants/context";
-import { canUseControls } from "../services/utils";
-import { initPoll } from "../services/methods";
-import { pollState } from "../services/state";
-import { deviceId } from "../services/user";
-import { DisplayResultsProp, ShowResultsProp } from "../types/Poll";
+import { idContext } from "../constants";
+import { canUseControls, deviceId, initPoll, pollState } from "../services";
+import type { DisplayResultsProp, ShowResultsProp } from "../types";
 
 import PollControl from "./PollControl.vue";
 import PollQuestion from "./PollQuestion.vue";
@@ -51,7 +48,7 @@ function toggleResults() {
   canShowResults.value = !canShowResults.value;
 }
 
-// Show results when user submit a value
+// Show results when current user submit a value
 watch(
   () => pollState[id.value]?.results[deviceId.value],
   () => {

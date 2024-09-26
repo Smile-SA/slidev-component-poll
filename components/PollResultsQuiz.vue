@@ -2,7 +2,7 @@
 import { inject, isVNode, ref } from "vue";
 
 import { useAnswers } from "../composables/useAnswers";
-import { idContext } from "../constants/context";
+import { idContext } from "../constants";
 
 import PollResultQuiz from "./PollResultQuiz.vue";
 

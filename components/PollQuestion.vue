@@ -3,13 +3,10 @@ import { configs } from "@slidev/client";
 import { computed, inject, isVNode, ref } from "vue";
 
 import { useAnswers } from "../composables/useAnswers";
-import { idContext } from "../constants/context";
-import { getDefaultValue } from "../services/helper";
-import { answerPoll } from "../services/methods";
-import { pollState } from "../services/state";
-import { deviceId, userId } from "../services/user";
-import { Result } from "../types/Poll";
-import { PollStatus } from "../types/PollStatus";
+import { idContext } from "../constants";
+import { answerPoll, deviceId, getDefaultValue, pollState, userId } from "../services";
+import type { Result } from "../types";
+import { PollStatus } from "../types";
 
 import PollUser from "./PollUser.vue";
 

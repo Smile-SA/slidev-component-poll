@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import { DisplayResultsProp, ShowResultsProp } from "../types/Poll";
+import type { DisplayResultsProp, ShowResultsProp } from "../types";
 
 import PollContainer from "./PollContainer.vue";
 import PollProvider from "./PollProvider.vue";

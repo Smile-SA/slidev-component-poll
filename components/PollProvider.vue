@@ -2,7 +2,7 @@
 import { provide, ref } from "vue";
 
 import { useId } from "../composables/useId";
-import { answersContext, idContext } from "../constants/context";
+import { Answers, answersContext, idContext } from "../constants";
 
 const props = defineProps<{
   id?: string;
@@ -12,10 +12,10 @@ let id;
 if (props.id) {
   id = ref(props.id);
 } else if (!id) {
-  ({ id } = useId());
+  id = useId();
 }
 
-const answers = ref([]);
+const answers = ref<Answers>([]);
 
 function setAnswers(newAnswers) {
   answers.value = newAnswers;
