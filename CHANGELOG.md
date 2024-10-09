@@ -1,3 +1,13 @@
+### 2.2.0 (2024-10-09)
+
+##### Chores
+
+*  update slidev dependencies ([84f160a8](https://github.com/Smile-SA/slidev-component-poll/commit/84f160a8a4238ef26395acdaa3e7f21444605c99))
+
+##### New Features
+
+*  switch to using slidev-addon-sync and slidev-sync-server ([a12d999e](https://github.com/Smile-SA/slidev-component-poll/commit/a12d999e336502d1bb97b98a0239319651db0acc))
+
 #### 2.1.1 (2024-04-18)
 
 ##### Bug Fixes
