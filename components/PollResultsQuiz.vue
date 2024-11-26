@@ -1,28 +1,29 @@
 <script lang="ts" setup>
-import { inject, isVNode, ref } from "vue";
+import { computed, isVNode } from "vue";
 
 import { useAnswers } from "../composables/useAnswers";
-import { idContext } from "../constants";
+import type { CorrectAnswer, DisplayAnswersProp } from "../types";
 
 import PollResultQuiz from "./PollResultQuiz.vue";
 
 const props = defineProps<{
   answers?: string[];
   controlled?: boolean;
-  correctAnswer?: string | number | number[];
+  correctAnswer?: CorrectAnswer;
+  displayAnswers: DisplayAnswersProp;
   multiple?: boolean;
   public?: boolean;
 }>();
-const id = inject(idContext, ref(""));
 
 const renderAnswers = useAnswers(props.answers);
 </script>
 
 <template>
-  <ul class="poll-results-quiz mb-2">
+  <ul class="poll-results-quiz ">
     <PollResultQuiz
       v-for="(answer, index) in renderAnswers"
       :correctAnswer="correctAnswer"
+      :displayAnswers="displayAnswers"
       :index="index"
       :multiple="multiple"
       :public="public"

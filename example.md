@@ -40,7 +40,7 @@ theme: default
 
 ## Multiple poll
 
-<Poll question="What are your favorite colors ?" :answers="['Red', 'Green', 'Blue']" displayResults="poll" :multiple="true" />
+<Poll question="What are your favorite colors ?" :answers="['Red', 'Green', 'Blue']" :multiple="true" />
 
 ---
 
@@ -52,13 +52,13 @@ theme: default
 
 ## Editable poll
 
-<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" displayResults="poll" :editable="true" />
+<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :editable="true" />
 
 ---
 
 ## Controlled poll
 
-<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :controlled="true" displayResults="poll" />
+<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :controlled="true" />
 
 ---
 
@@ -70,16 +70,28 @@ theme: default
 
 ## Controlled re-openable poll
 
-<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :controlled="true" displayResults="poll" :reOpenable="true" />
+<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :controlled="true" :reOpenable="true" />
 
 ---
 
 ## Controlled clearable poll
 
-<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :controlled="true" :clearable="true" displayResults="poll" />
+<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :controlled="true" :clearable="true" />
 
 ---
 
 ## Controlled clearable multiple poll
 
-<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :controlled="true" :multiple="true" :clearable="true" displayResults="poll" />
+<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :controlled="true" :multiple="true" :clearable="true" />
+
+---
+
+## Brier quiz
+
+<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" correctAnswer="0" displayAnswers="brier" />
+
+---
+
+## Brier quiz with estimates
+
+<Poll question="What is your favorite color ?" :answers="['Red', 'Green', 'Blue']" :correctAnswer="{ 0: 0.5, 1: 0.5, 2: 1 }" displayAnswers="brier" />

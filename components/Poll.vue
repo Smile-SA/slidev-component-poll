@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import type { DisplayResultsProp, ShowResultsProp } from "../types";
+import type { CorrectAnswer, DisplayAnswersProp, ShowResultsProp } from "../types";
 
 import PollContainer from "./PollContainer.vue";
 import PollProvider from "./PollProvider.vue";
@@ -9,11 +9,12 @@ const props = defineProps<{
   answers?: string[];
   clearable?: boolean;
   controlled?: boolean;
-  correctAnswer?: string | number | number[];
-  displayResults?: DisplayResultsProp;
+  correctAnswer?: CorrectAnswer;
+  displayAnswers?: DisplayAnswersProp;
   editable?: boolean;
   id?: string;
   multiple?: boolean;
+  public?: boolean;
   question: string;
   reOpenable?: boolean;
   showResults?: ShowResultsProp;

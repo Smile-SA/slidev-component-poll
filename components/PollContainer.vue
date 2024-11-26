@@ -4,7 +4,11 @@ import { computed, inject, onMounted, ref, watch } from "vue";
 import { useAnswers } from "../composables/useAnswers";
 import { idContext } from "../constants";
 import { canUseControls, deviceId, initPoll, pollState } from "../services";
-import type { DisplayResultsProp, ShowResultsProp } from "../types";
+import type {
+  CorrectAnswer,
+  DisplayAnswersProp,
+  ShowResultsProp,
+} from "../types";
 
 import PollControl from "./PollControl.vue";
 import PollQuestion from "./PollQuestion.vue";
@@ -16,31 +20,36 @@ const props = withDefaults(
     answers?: string[];
     clearable?: boolean;
     controlled?: boolean;
-    correctAnswer?: string | number | number[];
-    displayResults?: DisplayResultsProp;
+    correctAnswer?: CorrectAnswer;
+    displayAnswers?: DisplayAnswersProp;
     editable?: boolean;
     multiple?: boolean;
+    public?: boolean;
     question: string;
     reOpenable?: boolean;
     showResults?: ShowResultsProp;
   }>(),
-  { displayResults: "quiz", controlled: false, showResults: "auto" }
+  {
+    displayAnswers: "mcq",
+    controlled: false,
+    showResults: "auto",
+  },
 );
 const id = inject(idContext, ref(""));
 
 const showControls = computed(() => props.controlled && canUseControls.value);
 const hasResult = computed(
-  () => pollState[id.value]?.results[deviceId.value] !== undefined
+  () => pollState[id.value]?.results[deviceId.value] !== undefined,
 );
 const canShowResults = ref(
-  canUseControls.value || (hasResult.value && props.showResults !== "none")
+  canUseControls.value || (hasResult.value && props.showResults !== "none"),
 );
 const showPollButton = computed(() => canUseControls.value || props.editable);
 const showResultsButton = computed(
   () =>
     canUseControls.value ||
     props.showResults === "free" ||
-    (props.showResults === "auto" && hasResult.value)
+    (props.showResults === "auto" && hasResult.value),
 );
 useAnswers(props.answers);
 
@@ -55,20 +64,17 @@ watch(
     if (hasResult.value && props.showResults !== "none") {
       canShowResults.value = true;
     }
-  }
+  },
 );
 
 // Reset canShowResults when poll results are reset
-watch(
-  hasResult,
-  (newValue, oldValue) => {
-    if (!newValue && oldValue) {
-      if (!canUseControls.value && canShowResults.value) {
-        canShowResults.value = false;
-      }
+watch(hasResult, (newValue, oldValue) => {
+  if (!newValue && oldValue) {
+    if (!canUseControls.value && canShowResults.value) {
+      canShowResults.value = false;
     }
   }
-);
+});
 
 onMounted(() => {
   if (!pollState[id.value]) {
@@ -101,6 +107,8 @@ onMounted(() => {
     v-if="!canShowResults"
     :answers="answers"
     :controlled="controlled"
+    :correctAnswer="correctAnswer"
+    :displayAnswers="displayAnswers"
     :editable="editable"
     :multiple="multiple"
   >
@@ -111,8 +119,9 @@ onMounted(() => {
     :answers="answers"
     :controlled="controlled"
     :correctAnswer="correctAnswer"
-    :displayResults="displayResults"
+    :displayAnswers="displayAnswers"
     :multiple="multiple"
+    :public="public"
   />
   <PollControl
     v-if="showControls"

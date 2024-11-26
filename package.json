@@ -44,7 +44,8 @@
     "generate-changelog": "^1.8.0"
   },
   "dependencies": {
-    "@vueuse/motion": "^2.2.5",
+    "@vueuse/core": "^10.10.0",
+    "@vueuse/motion": "^2.2.6",
     "uuid": "^10.0.0"
   }
 }

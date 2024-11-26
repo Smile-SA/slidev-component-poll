@@ -4,33 +4,79 @@ import { computed, inject, isVNode, ref } from "vue";
 
 import { useAnswers } from "../composables/useAnswers";
 import { idContext } from "../constants";
-import { answerPoll, deviceId, getDefaultValue, pollState, userId } from "../services";
-import type { Result } from "../types";
+import {
+  answerPoll,
+  deviceId,
+  getDefaultValue,
+  pollState,
+  userId,
+} from "../services";
+import type { CorrectAnswer, DisplayAnswersProp, Result } from "../types";
 import { PollStatus } from "../types";
 
 import PollUser from "./PollUser.vue";
+import PollInput from "./PollInput.vue";
 
 const props = withDefaults(
   defineProps<{
     answers?: string[];
     controlled?: boolean;
+    correctAnswer?: CorrectAnswer;
+    displayAnswers: DisplayAnswersProp;
     editable?: boolean;
     multiple?: boolean;
   }>(),
-  { editable: false, multiple: false }
+  { displayAnswers: "mcq", editable: false, multiple: false },
 );
 const id = inject(idContext, ref(""));
 
 const renderAnswers = useAnswers(props.answers);
 const hasResult = computed(
-  () => pollState[id.value]?.results[deviceId.value] !== undefined
+  () => pollState[id.value]?.results[deviceId.value] !== undefined,
 );
-const chosenAnswer = ref<null | Result>(
-  getDefaultValue(id.value, hasResult.value, props.multiple)
+const result = ref<null | Result>(
+  getDefaultValue(
+    id.value,
+    hasResult.value,
+    props.multiple,
+    props.displayAnswers,
+  ),
 );
 
+const pointsToAttribute = computed(() => {
+  if (props.correctAnswer instanceof Array) {
+    return props.correctAnswer.length * 100;
+  }
+  if (props.correctAnswer instanceof Object) {
+    return (
+      Object.values(props.correctAnswer)
+        .filter((value) => value != null)
+        .reduce((a, b) => a + b, 0) * 100
+    );
+  }
+  return 100;
+});
+const allocatedPoints = computed(() => {
+  if (result.value instanceof Array) {
+    return result.value.length * 100;
+  }
+  if (result.value instanceof Object) {
+    return Object.values(result.value)
+      .filter((value) => value != null)
+      .reduce((a, b) => a + b, 0);
+  }
+  return Number(result.value) * 100;
+});
+const remainingPointsToAttribute = computed(() => {
+  return pointsToAttribute.value - allocatedPoints.value;
+});
+
 function handleSubmit() {
-  answerPoll(id.value, chosenAnswer.value);
+  answerPoll(id.value, result.value);
+}
+
+function handleChange(value: Result) {
+  result.value = value;
 }
 </script>
 
@@ -45,18 +91,21 @@ function handleSubmit() {
         @submit.prevent="handleSubmit"
         class="poll-question__form"
       >
+        <div v-if="displayAnswers === 'brier'">
+          {{ remainingPointsToAttribute }} points to attribute
+        </div>
         <ul class="poll-question__list mb-2">
           <li
             v-for="(answer, index) in renderAnswers"
             class="poll-question__item list-none flex items-center !m-0 !p-1 !leading-6 border-1 border-transparent"
           >
             <label class="poll-question__item-label flex w-full">
-              <input
-                :type="multiple ? 'checkbox' : 'radio'"
-                :value="index"
-                :name="`question-${id}`"
-                v-model="chosenAnswer"
-                class="poll-question__item-input mr-1"
+              <PollInput
+                :displayAnswers="displayAnswers"
+                :index="index"
+                :multiple="multiple"
+                :result="result"
+                @change="handleChange"
               />
               <div class="poll-question__item-text flex-1">
                 <component v-if="isVNode(answer)" :is="answer" />
@@ -65,7 +114,13 @@ function handleSubmit() {
             </label>
           </li>
         </ul>
-        <input type="submit" class="poll-question__input p-1" />
+        <input
+          :disabled="
+            displayAnswers === 'brier' && remainingPointsToAttribute !== 0
+          "
+          type="submit"
+          class="poll-question__input p-1"
+        />
       </form>
       <div
         v-else-if="controlled && pollState[id].status === PollStatus.CLEAR"
@@ -104,12 +159,20 @@ function handleSubmit() {
   @apply bg-gray-800;
 }
 
-.poll-question__input:hover {
+.poll-question__input:not(:disabled):hover {
   @apply bg-gray-400;
 }
 
-.dark .poll-question__input:hover {
+.dark .poll-question__input:not(:disabled):hover {
   @apply bg-gray-600;
+}
+
+.poll-question__input:disabled {
+  @apply text-gray-400;
+}
+
+.dark .poll-question__input:disabled {
+  @apply text-gray-600;
 }
 </style>
 

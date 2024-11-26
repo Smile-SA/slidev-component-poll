@@ -3,12 +3,14 @@ import { computed, inject, isVNode, ref } from "vue";
 
 import { answersContext, idContext } from "../constants";
 import { pollState } from "../services";
+import type { CorrectAnswer, DisplayAnswersProp } from "../types";
 
 import PollResultPoll from "./PollResultPoll.vue";
 
 const props = defineProps<{
   controlled?: boolean;
-  correctAnswer?: string | number | number[];
+  correctAnswer?: CorrectAnswer;
+  displayAnswers: DisplayAnswersProp;
   multiple?: boolean;
 }>();
 
@@ -59,6 +61,7 @@ const max = computed(() => Math.max(...counts.value));
       :controlled="controlled"
       :count="counts[index]"
       :correctAnswer="correctAnswer"
+      :displayAnswers="displayAnswers"
       :index="index"
       :leading="counts[index] === max"
       :percentage="percentages[index]"
