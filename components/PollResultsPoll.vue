@@ -11,6 +11,7 @@ const props = defineProps<{
   controlled?: boolean;
   correctAnswer?: CorrectAnswer;
   displayAnswers: DisplayAnswersProp;
+  explanations?: string[];
   multiple?: boolean;
 }>();
 
@@ -33,9 +34,7 @@ const counts = computed<number[]>(() => {
     Object.values(poll.value.results).reduce(
       (acc: number, result) =>
         acc +
-        Number(
-          result instanceof Array ? result.indexOf(i) > -1 : result === i
-        ),
+        Number(result instanceof Array ? result.indexOf(i) > -1 : result === i),
       0
     )
   );

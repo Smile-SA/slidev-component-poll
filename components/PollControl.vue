@@ -3,14 +3,23 @@ import { inject, ref } from "vue";
 import { useNav } from "@slidev/client";
 
 import { idContext } from "../constants";
-import { hasControlAccess, pollState, resetPoll, setPollStatus } from "../services";
+import {
+  hasControlAccess,
+  pollState,
+  resetPoll,
+  setPollStatus,
+} from "../services";
 import { PollStatus } from "../types";
 
-const props = defineProps<{
-  clearable?: boolean;
-  presenterOnly?: boolean;
-  reOpenable?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    clearable?: boolean;
+    presenterOnly?: boolean;
+    reOpenable?: boolean;
+    wording?: string;
+  }>(),
+  { wording: "poll" }
+);
 
 const { isPresenter } = useNav();
 
@@ -43,21 +52,21 @@ function clear() {
       @click="open"
       class="poll-control__button p-1"
     >
-      Open poll
+      Open {{ wording }}
     </button>
     <button
       v-if="pollState[id].status === PollStatus.OPEN"
       @click="close"
       class="poll-control__button p-1"
     >
-      Close poll
+      Close {{ wording }}
     </button>
     <button
       v-if="pollState[id].status === PollStatus.CLOSED && clearable"
       @click="clear"
       class="poll-control__button p-1"
     >
-      Clear poll
+      Clear {{ wording }}
     </button>
   </div>
 </template>

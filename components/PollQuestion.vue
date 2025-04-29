@@ -7,6 +7,7 @@ import { idContext } from "../constants";
 import {
   answerPoll,
   deviceId,
+  getBrierMaxPoints,
   getDefaultValue,
   pollState,
   userId,
@@ -26,36 +27,24 @@ const props = withDefaults(
     editable?: boolean;
     multiple?: boolean;
   }>(),
-  { displayAnswers: "mcq", editable: false, multiple: false },
+  { displayAnswers: "mcq", editable: false, multiple: false }
 );
 const id = inject(idContext, ref(""));
 
 const renderAnswers = useAnswers(props.answers);
 const hasResult = computed(
-  () => pollState[id.value]?.results[deviceId.value] !== undefined,
+  () => pollState[id.value]?.results[deviceId.value] !== undefined
 );
 const result = ref<null | Result>(
   getDefaultValue(
     id.value,
     hasResult.value,
     props.multiple,
-    props.displayAnswers,
-  ),
+    props.displayAnswers
+  )
 );
 
-const pointsToAttribute = computed(() => {
-  if (props.correctAnswer instanceof Array) {
-    return props.correctAnswer.length * 100;
-  }
-  if (props.correctAnswer instanceof Object) {
-    return (
-      Object.values(props.correctAnswer)
-        .filter((value) => value != null)
-        .reduce((a, b) => a + b, 0) * 100
-    );
-  }
-  return 100;
-});
+const pointsToAttribute = computed(() => getBrierMaxPoints(props.correctAnswer));
 const allocatedPoints = computed(() => {
   if (result.value instanceof Array) {
     return result.value.length * 100;

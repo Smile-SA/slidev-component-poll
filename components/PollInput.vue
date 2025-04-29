@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
 
 import { idContext } from "../constants";
 import type { DisplayAnswersProp, Result } from "../types";
@@ -12,12 +12,25 @@ const props = withDefaults(
     multiple?: boolean;
     result: null | Result;
   }>(),
-  { displayAnswers: "mcq", multiple: false },
+  { displayAnswers: "mcq", multiple: false }
 );
 const emits = defineEmits<{
   change: [value: Result];
 }>();
 const id = inject(idContext, ref(""));
+const checked = computed(() => {
+  if (props.result === null) {
+    return false;
+  } 
+  if (props.result instanceof Array) {
+    return props.result.includes(props.index);
+  }
+  // This case should never happen because it only is true when displayAnswers is "brier"
+  if (props.result instanceof Object) {
+    return props.result[props.index]!== undefined;
+  }
+  return props.result === props.index;
+});
 
 function handleChange(index: number) {
   if (props.multiple) {
@@ -48,7 +61,7 @@ function handleBrierChange(index: number, e) {
     :type="multiple ? 'checkbox' : 'radio'"
     :value="index"
     :name="`question-${id}`"
-    :checked="result === index"
+    :checked="checked"
     @input="handleChange(index)"
     class="poll-input mr-1"
   />

@@ -20,11 +20,12 @@ const props = withDefaults(
     controlled?: boolean;
     correctAnswer?: CorrectAnswer;
     displayAnswers: DisplayAnswersProp;
+    explanation?: string;
     index: number;
     multiple?: boolean;
     public?: boolean;
   }>(),
-  { displayAnswers: "mcq" },
+  { displayAnswers: "mcq" }
 );
 const id = inject(idContext, ref(""));
 
@@ -34,12 +35,12 @@ const users = computed(() =>
   results.value
     .filter(([, result]) => indexMatchResult(props.index, result))
     .map(([deviceId]) => userState[deviceId])
-    .join(", "),
+    .join(", ")
 );
 const isCorrect = computed(
   () =>
     indexMatchResult(props.index, props.correctAnswer) &&
-    props.displayAnswers !== "brier",
+    props.displayAnswers !== "brier"
 );
 const downplayed = computed(() => {
   if (
@@ -53,23 +54,23 @@ const downplayed = computed(() => {
   return false;
 });
 const userPercentage = computed(
-  () => (result.value instanceof Object && result.value[props.index]) ?? 0,
+  () => (result.value instanceof Object && result.value[props.index]) ?? 0
 );
 const correctPercentage = computed(() =>
   props.correctAnswer instanceof Array
     ? Number(props.correctAnswer.includes(props.index))
     : props.correctAnswer instanceof Object
       ? props.correctAnswer[props.index]
-      : Number(Number(props.correctAnswer) === props.index),
+      : Number(Number(props.correctAnswer) === props.index)
 );
 const answers = computed(() =>
-  results.value.filter(entriesIsValid(props.index)),
+  results.value.filter(entriesIsValid(props.index))
 );
 const averagePercentage = computed(() =>
   answers.value.length === 0
     ? 0
     : answers.value.reduce((acc, [, result]) => acc + result[props.index], 0) /
-      answers.value.length,
+      answers.value.length
 );
 const standardDeviation = computed(() =>
   answers.value.length === 0
@@ -78,73 +79,76 @@ const standardDeviation = computed(() =>
         answers.value.reduce(
           (acc, [, result]) =>
             acc + (result[props.index] - averagePercentage.value) ** 2,
-          0,
-        ) / answers.value.length,
-      ),
+          0
+        ) / answers.value.length
+      )
 );
 </script>
 
 <template>
-  <li
-    class="poll-result"
-    :class="{
-      '!border-green-500': isCorrect,
-      'opacity-50': downplayed,
-      'poll-result--bar': props.displayAnswers === 'brier',
-    }"
-  >
-    <template v-if="props.displayAnswers === 'brier'">
-      <div
-        v-if="userPercentage !== false"
-        :style="{ width: `${userPercentage}%` }"
-        class="poll-result__bar absolute top-0 bottom-0 left-0"
-      ></div>
-      <div
-        v-if="correctPercentage != null"
-        :style="{ width: `${correctPercentage * 100}%` }"
-        class="poll-result__goal absolute top-0 bottom-0 left-0 border-solid border-r-2 border-green-600"
-      ></div>
-      <div
-        v-if="canUseControls || public"
-        :style="{
-          left: `${averagePercentage}%`,
-          width: `${standardDeviation * 2}%`,
-        }"
-        class="poll-result__average absolute h-4 border-solid border-l-2 border-r-2 -translate-x-2/4"
-      ></div>
-    </template>
-    <PollInput
-      v-if="!canUseControls && displayAnswers !== 'brier'"
-      :disabled="true"
-      :displayAnswers="displayAnswers"
-      :index="index"
-      :multiple="multiple"
-      :result="result"
-    />
-    <div class="poll-result__answer z-0">
-      <slot />
-    </div>
+  <li class="poll-result__item">
     <div
-      v-if="
-        (canUseControls || public) &&
-        !configs.pollSettings?.anonymous &&
-        props.displayAnswers !== 'brier'
-      "
-      class="flex-1"
+      class="poll-result"
+      :class="{
+        '!border-green-500': isCorrect,
+        'opacity-50': downplayed,
+        'poll-result--bar': props.displayAnswers === 'brier',
+      }"
     >
-      {{ users }}
+      <template v-if="props.displayAnswers === 'brier'">
+        <div
+          v-if="userPercentage !== false"
+          :style="{ width: `${userPercentage}%` }"
+          class="poll-result__bar absolute top-0 bottom-0 left-0"
+        ></div>
+        <div
+          v-if="correctPercentage != null"
+          :style="{ width: `${correctPercentage * 100}%` }"
+          class="poll-result__goal absolute top-0 bottom-0 left-0 border-solid border-r-2 border-green-600"
+        ></div>
+        <div
+          v-if="canUseControls || public"
+          :style="{
+            left: `${averagePercentage}%`,
+            width: `${standardDeviation * 2}%`,
+          }"
+          class="poll-result__average absolute h-4 border-solid border-l-2 border-r-2 -translate-x-2/4"
+        ></div>
+      </template>
+      <PollInput
+        v-if="!canUseControls && displayAnswers !== 'brier'"
+        :disabled="true"
+        :displayAnswers="displayAnswers"
+        :index="index"
+        :multiple="multiple"
+        :result="result"
+      />
+      <div class="poll-result__answer z-0">
+        <slot />
+      </div>
+      <div
+        v-if="
+          (canUseControls || public) &&
+          !configs.pollSettings?.anonymous &&
+          props.displayAnswers !== 'brier'
+        "
+        class="flex-1"
+      >
+        {{ users }}
+      </div>
+      <div
+        v-if="props.displayAnswers === 'brier'"
+        class="poll-result__values z-0"
+      >
+        <span v-if="userPercentage !== false" class="poll-result__percentage"
+          >{{ userPercentage }}% /
+        </span>
+        <span class="poll-result__estimate">{{
+          correctPercentage === null ? "NA" : `${correctPercentage * 100}%`
+        }}</span>
+      </div>
     </div>
-    <div
-      v-if="props.displayAnswers === 'brier'"
-      class="poll-result__values z-0"
-    >
-      <span v-if="userPercentage !== false" class="poll-result__percentage"
-        >{{ userPercentage }}% /
-      </span>
-      <span class="poll-result__estimate">{{
-        correctPercentage === null ? "NA" : `${correctPercentage * 100}%`
-      }}</span>
-    </div>
+    <div v-if="explanation" class="poll-result__explanation">{{ explanation }}</div>
   </li>
 </template>
 

@@ -1,10 +1,4 @@
-import {
-  computed,
-  inject,
-  onMounted,
-  RendererNode,
-  useSlots,
-} from "vue";
+import { computed, inject, onMounted, RendererNode, useSlots } from "vue";
 
 import { answersContext } from "../constants";
 

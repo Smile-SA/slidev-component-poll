@@ -23,34 +23,37 @@ const props = withDefaults(
     correctAnswer?: CorrectAnswer;
     displayAnswers?: DisplayAnswersProp;
     editable?: boolean;
+    explanations?: string[];
     multiple?: boolean;
     public?: boolean;
     question: string;
     reOpenable?: boolean;
     showResults?: ShowResultsProp;
+    showScore?: boolean;
   }>(),
   {
     displayAnswers: "mcq",
     controlled: false,
     showResults: "auto",
-  },
+  }
 );
 const id = inject(idContext, ref(""));
 
 const showControls = computed(() => props.controlled && canUseControls.value);
 const hasResult = computed(
-  () => pollState[id.value]?.results[deviceId.value] !== undefined,
+  () => pollState[id.value]?.results[deviceId.value] !== undefined
 );
 const canShowResults = ref(
-  canUseControls.value || (hasResult.value && props.showResults !== "none"),
+  canUseControls.value || (hasResult.value && props.showResults !== "none")
 );
 const showPollButton = computed(() => canUseControls.value || props.editable);
 const showResultsButton = computed(
   () =>
     canUseControls.value ||
     props.showResults === "free" ||
-    (props.showResults === "auto" && hasResult.value),
+    (props.showResults === "auto" && hasResult.value)
 );
+const wording = computed(() => Boolean(props.correctAnswer) ? "quiz" : "poll");
 useAnswers(props.answers);
 
 function toggleResults() {
@@ -64,7 +67,7 @@ watch(
     if (hasResult.value && props.showResults !== "none") {
       canShowResults.value = true;
     }
-  },
+  }
 );
 
 // Reset canShowResults when poll results are reset
@@ -92,7 +95,7 @@ onMounted(() => {
       @click="toggleResults"
       class="poll__button underline"
     >
-      Show poll
+      Show {{ wording }}
     </button>
     <button
       v-if="showResultsButton"
@@ -120,12 +123,15 @@ onMounted(() => {
     :controlled="controlled"
     :correctAnswer="correctAnswer"
     :displayAnswers="displayAnswers"
+    :explanations="explanations"
     :multiple="multiple"
     :public="public"
+    :showScore="showScore"
   />
   <PollControl
     v-if="showControls"
     :clearable="clearable"
+    :wording="wording"
     :reOpenable="reOpenable"
   />
 </template>
